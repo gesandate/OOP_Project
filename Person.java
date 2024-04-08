@@ -1,3 +1,6 @@
+/**
+ * The type Person.
+ */
 public abstract class Person {
     private String FName;
     private String LName;

@@ -1,14 +1,14 @@
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.io.BufferedReader;
 
 public class RunShop {
     private static Map<String, User> users_list = new HashMap<>();
     //path //TO BE CHANGED FOR WHEN RUNNING CODE
-    private static final String user_file= "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
+    //private static final String user_file= "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
     //this will be used to get car info and when editing car_data
     private static HashMap<Integer, Car> car_list = new HashMap<>();
     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/car_data.csv";
@@ -57,10 +57,10 @@ public class RunShop {
         // User user1 = createUser(); //when enter information by hand
 
         //Test user
-        User user1 = new User("Seb", "Lev", 500.25, 0, true, "Seb1", "123");
+        User user1 = new User("Seb", "Lev", 17293.00, 0, true, "Seb1", "123");
         users_list.put(user1.getUsername(), user1);
 
-
+        String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
         try {
             // Create a FileReader object to read the CSV file
             FileReader fileReader = new FileReader(user_file);
@@ -123,15 +123,21 @@ public class RunShop {
                 boolean displayAllCars = input.equalsIgnoreCase("y");
 
                 if (displayAllCars) {
+                    //call add cars before display cars
+                    add_cars();
                     System.out.println("2. Filter cars by new or used? (new/used/n)");
                     input = scanner.nextLine();
                     if (input.equalsIgnoreCase("Exit")) {
                         break; // Exit the program
                     }
 
-                    String new_used = null;
+                    String new_used = "null";
                     if (input.equalsIgnoreCase("new") || input.equalsIgnoreCase("used")) {
                         new_used = input.toLowerCase();
+                    }else if (input.equalsIgnoreCase("n")) {
+                        System.out.println("Display call cars");
+                        displayCars(new_used, -1);
+                        break;
                     }
 
                     System.out.println("3. Filter cars by budget? (y/n)");
@@ -143,20 +149,22 @@ public class RunShop {
 
                     Double budget = null;
                     if (filterByBudget) {
-                        input = scanner.nextLine();
-                        if (input.equalsIgnoreCase("Exit")) {
-                            break; // Exit
-                        }
                         try {
                             User curr = users_list.get(username);
                             budget = curr.getBudget();
+                            System.out.println(curr.getUsername()+" current budget: "+budget);
+                            displayCars(new_used, budget);
+                            break;
                         } catch (NumberFormatException e) {
                             System.out.println("Something wrong with budget contact admin");
                             continue; // loop
                         }
-                    }
 
-                    // Call method to display and filter cars based on user input
+                    }else{
+                        displayCars(new_used, 0);
+                        break;
+                    }
+                    //System.out.println("END OF IF display section");
                     //displayCars(new_used, budget);
                 } else {
                     // Do nothing if the user chose not to display all cars
@@ -225,15 +233,30 @@ public class RunShop {
 
     public static void displayCars(String condition, double budget) {
         // Display header
-        System.out.println("ID\tCar Type\tModel\tCondition\tColor\tPrice");
-
+        System.out.println("ID\tCar Type\tModel\tCondition\tColor\tFuel Type\tCapacity\tTransmission\tMileage\tVIN\tPrice");
         // Iterate over cars
         for (Car car : car_list.values()) {
+            //shows all cars
+            if (condition.equalsIgnoreCase("null")){
+                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
+                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
+                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
+                        car.getVIN()+ "\t" +car.getPrice());
+            }
             // Check if the condition and price match the criteria
-            if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) {
+            if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) { //maybe add a with in range of a couple 100s
                 // Display car information
                 System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getPrice());
+                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
+                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
+                        car.getVIN()+ "\t" +car.getPrice());
+            }
+
+            if (car.getCondition().equalsIgnoreCase(condition) && budget == 0){ //display cars with condition no budget
+                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
+                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
+                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
+                        car.getVIN()+ "\t" +car.getPrice());
             }
         }
     }
