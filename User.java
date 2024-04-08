@@ -1,4 +1,4 @@
-public class User{
+public class User extends Person{
 
     private String  firstName;
     private String  lastName;
@@ -10,8 +10,7 @@ public class User{
 
 
     public User(){
-        this.firstName       = "NULL";
-        this.lastName        = "NULL";
+        super("NULL", "NULL", 0, "NULL");
         this.budget          = 0.0;
         this.carsPurchased   = 0;
         this.minerCarsMember = false;
@@ -19,8 +18,7 @@ public class User{
         this.password        = "NULL";
     }
     public User(String firstName, String lastName, Double budget, Integer carsPurchased, Boolean minerCarsMember, String username, String password){
-        this.firstName       = firstName;
-        this.lastName        = lastName;
+        super(firstName, lastName);
         this.budget          = budget;
         this.carsPurchased   = carsPurchased;
         this.minerCarsMember = minerCarsMember;

@@ -1,8 +1,22 @@
-public class Person {
+public abstract class Person {
     private String FName;
     private String LName;
     private int Age;
     private String gender;
+
+    public Person() {
+        this.FName = "NULL";
+        this.LName = "NULL";
+        this.Age = 0;
+        this.gender = "NULL";
+    }
+    public Person(String FName, String LName) {
+        this.FName = FName;
+        this.LName = LName;
+        // Set default values for the other attributes
+        this.Age = 0;
+        this.gender = "NULL";
+    }
 
     public Person(String FName, String LName, int Age, String gender) {
         this.FName = FName;

@@ -9,21 +9,20 @@ public class Log {
     private String action;
     private String timeStamp;
 
-    public Log() {
-        this.name_of_user = "";
-        this.action = "";
-        this.timeStamp = "";
+    public Log(String name_of_user, String action, String timeStamp) {
+        this.name_of_user = name_of_user;
+        this.action = action;
+        this.timeStamp = timeStamp;
     }
 
-    public void logAction(User user, String action) {
-        String filename = user.getUsername() + "_actions.log";
+    public void logAction(User user, String action, String filename) {
         String timestamp = new SimpleDateFormat("HH:mm:ss MM/dd/yy").format(new Date());
         String logMessage = timestamp + " - " + user.getUsername() + " " + action + "\n";
         try {
             PrintWriter out = new PrintWriter(new FileWriter(filename, true));
             out.append(logMessage);
             out.close();
-            System.out.println("Action logged successfully.");
+            //System.out.println("Action logged successfully.");
         } catch (IOException e) {
             System.err.println("Error logging action: " + e.getMessage());
         }

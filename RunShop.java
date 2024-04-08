@@ -7,7 +7,8 @@ import java.io.BufferedReader;
 
 public class RunShop {
     private static Map<String, User> users_list = new HashMap<>();
-
+    //This will be the log file of all users actions
+    private static final String logFile = "log.txt";
     public static User createUser() {
         Scanner scanner = new Scanner(System.in);
         User user = new User();
@@ -97,7 +98,14 @@ public class RunShop {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        boolean is_user = login();
+
+        // Get user input for username and password
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+        boolean is_user = login(username,password);
+
         if (is_user){
             while (true) {
                 System.out.println("Menu");
@@ -111,24 +119,41 @@ public class RunShop {
                 boolean displayAllCars = input.equalsIgnoreCase("y");
 
                 if (displayAllCars) {
-                    System.out.println("2. Filter cars? (y/n)");
+                    System.out.println("2. Filter cars by new or used? (new/used/n)");
                     input = scanner.nextLine();
                     if (input.equalsIgnoreCase("Exit")) {
-                        System.out.println("Exiting...");
+                        break; // Exit the program
+                    }
+
+                    String new_used = null;
+                    if (input.equalsIgnoreCase("new") || input.equalsIgnoreCase("used")) {
+                        new_used = input.toLowerCase();
+                    }
+
+                    System.out.println("3. Filter cars by budget? (y/n)");
+                    input = scanner.nextLine();
+                    if (input.equalsIgnoreCase("Exit")) {
                         break;
                     }
-                    boolean filterCars = input.equalsIgnoreCase("y");
+                    boolean filterByBudget = input.equalsIgnoreCase("y");
+
+                    Double budget = null;
+                    if (filterByBudget) {
+                        input = scanner.nextLine();
+                        if (input.equalsIgnoreCase("Exit")) {
+                            break; // Exit
+                        }
+                        try {
+                            User curr = users_list.get(username);
+                            budget = curr.getBudget();
+                        } catch (NumberFormatException e) {
+                            System.out.println("Something wrong with budget contact admin");
+                            continue; // loop
+                        }
+                    }
 
                     // Call method to display and filter cars based on user input
-                    if (filterCars) {
-                        // Call method to filter cars
-                        // filterCarsMethod();
-                        System.out.println("Filtering cars...");
-                    } else {
-                        // Call method to display all cars
-                        // displayAllCarsMethod();
-                        System.out.println("Displaying all cars...");
-                    }
+                    //displayCars(new_used, budget);
                 } else {
                     // Do nothing if the user chose not to display all cars
                     System.out.println("No cars to display.");
@@ -140,14 +165,7 @@ public class RunShop {
     }
 
 
-    public static boolean login() {
-        // Get user input for username and password
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
-
+    public static boolean login(String username, String password) {
         // Check if the entered username exists and if the password matches
         if (users_list.containsKey(username)) {
             User currentUser = users_list.get(username);
