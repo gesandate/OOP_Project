@@ -111,6 +111,7 @@ public class RunShop {
         boolean is_user = login(username,password);
 
         if (is_user){
+            User curr = users_list.get(username);
             while (true) {
                 System.out.println("Menu");
                 System.out.println("1. Display all cars? (y/n)");
@@ -150,7 +151,6 @@ public class RunShop {
                     Double budget = null;
                     if (filterByBudget) {
                         try {
-                            User curr = users_list.get(username);
                             budget = curr.getBudget();
                             System.out.println(curr.getUsername()+" current budget: "+budget);
                             displayCars(new_used, budget);
@@ -166,10 +166,16 @@ public class RunShop {
                     }
                     //System.out.println("END OF IF display section");
                     //displayCars(new_used, budget);
-                } else {
+                } else { //***need to add a go back input
                     // Do nothing if the user chose not to display all cars
                     System.out.println("No cars to display.");
                 }
+                //add puchase part
+                System.out.println("3. Purchase Car");
+                System.out.println("Enter the ID of the car");
+                String input_ID = scanner.nextLine();
+                //purchase_car_check(input_ID,curr);
+
             }
 
             scanner.close(); // Close the scanner when done
@@ -261,7 +267,25 @@ public class RunShop {
         }
     }
 
-
+    //checks if requirnments for purchase are met
+    public static boolean purchase_car_check(int id, User curr){
+        for (Car car : car_list.values()) {
+            if (car.getID() == id){
+                if (curr.getBudget() >= car.getPrice()){
+                    if (car.getAvailability()>=1){
+                        return true;
+                    }else{
+                        System.out.println("Car selected is not in stock");
+                    }
+                }else{
+                    System.out.println("Car selected is outside of budget");
+                }
+            }else {
+                System.out.println("Not vaild Car ID");
+            }
+        }
+        return false;
+    }
 
 
 }
