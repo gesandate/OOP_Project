@@ -8,6 +8,7 @@ public class User{
     private String  username;
     private String  password;
 
+
     public User(){
         this.firstName       = "NULL";
         this.lastName        = "NULL";
@@ -16,6 +17,15 @@ public class User{
         this.minerCarsMember = false;
         this.username        = "NULL";
         this.password        = "NULL";
+    }
+    public User(String firstName, String lastName, Double budget, Integer carsPurchased, Boolean minerCarsMember, String username, String password){
+        this.firstName       = firstName;
+        this.lastName        = lastName;
+        this.budget          = budget;
+        this.carsPurchased   = carsPurchased;
+        this.minerCarsMember = minerCarsMember;
+        this.username        = username;
+        this.password        = password;
     }
 
     public void setFirstName(String firstName){
@@ -34,7 +44,7 @@ public class User{
         return this.lastName;
     }
 
-    public void setBudget(int budget){
+    public void setBudget(Double budget){
         this.budget = budget;
     }
 
