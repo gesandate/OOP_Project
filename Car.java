@@ -28,6 +28,21 @@ public class Car{
         this.condition     = "New";
         this.VIN           = "NULL";
     }
+    public Car(String carType, String model, int ID, int availability, double price, String fuelType, int capacity,
+               String transmission, int mileage, String color, String condition, String VIN) {
+        this.carType = carType;
+        this.model = model;
+        this.ID = ID;
+        this.availability = availability;
+        this.price = price;
+        this.fuelType = fuelType;
+        this.capacity = capacity;
+        this.transmission = transmission;
+        this.mileage = mileage;
+        this.color = color;
+        this.condition = condition;
+        this.VIN = VIN;
+    }
 
     public void setCarType(String carType){
         this.carType = carType;

@@ -7,6 +7,11 @@ import java.io.BufferedReader;
 
 public class RunShop {
     private static Map<String, User> users_list = new HashMap<>();
+    //path //TO BE CHANGED FOR WHEN RUNNING CODE
+    private static final String user_file= "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
+    //this will be used to get car info and when editing car_data
+    private static HashMap<Integer, Car> car_list = new HashMap<>();
+    private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/car_data.csv";
     //This will be the log file of all users actions
     private static final String logFile = "log.txt";
     public static User createUser() {
@@ -55,8 +60,7 @@ public class RunShop {
         User user1 = new User("Seb", "Lev", 500.25, 0, true, "Seb1", "123");
         users_list.put(user1.getUsername(), user1);
 
-        //path //TO BE CHANGED FOR WHEN RUNNING CODE
-        String user_file= "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
+
         try {
             // Create a FileReader object to read the CSV file
             FileReader fileReader = new FileReader(user_file);
@@ -181,6 +185,61 @@ public class RunShop {
         }
         return false;
     }
+
+    public static void add_cars(){
+        try{
+            // Create BufferedReader object
+            BufferedReader reader = new BufferedReader(new FileReader(car_file));
+            reader.readLine();
+            // Read each lin of the file
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                // Extract car information from the line
+                int id = Integer.parseInt(parts[0]);
+                String carType = parts[1];
+                String model = parts[2];
+                String condition = parts[3];
+                String color = parts[4];
+                int capacity = Integer.parseInt(parts[5]);
+                int mileage = Integer.parseInt(parts[6]);
+                String fuelType = parts[7];
+                String transmission = parts[8];
+                String vin = parts[9];
+                double price = Double.parseDouble(parts[10]);
+                int carsAvailable = Integer.parseInt(parts[11]);
+
+                // Create Car object
+                Car car = new Car(carType, model, id, carsAvailable, price, fuelType, capacity, transmission, mileage, color, condition, vin);
+
+                // Add car to carList
+                car_list.put(id, car);
+            }
+            // Close file
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void displayCars(String condition, double budget) {
+        // Display header
+        System.out.println("ID\tCar Type\tModel\tCondition\tColor\tPrice");
+
+        // Iterate over cars
+        for (Car car : car_list.values()) {
+            // Check if the condition and price match the criteria
+            if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) {
+                // Display car information
+                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
+                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getPrice());
+            }
+        }
+    }
+
+
+
 
 }
 
