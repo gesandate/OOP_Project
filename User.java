@@ -1,6 +1,6 @@
 package Project;
 /**
- * This is a user person in the system
+ * This is a user person in the system 
  * The user class extends the person class
  */
 public class User extends Person{
@@ -40,6 +40,7 @@ public class User extends Person{
      * @param firstName the first name to set for the user
      */
     public void setFirstName(String firstName){
+       
         this.firstName = firstName;
     }
 
