@@ -1,6 +1,9 @@
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.io.BufferedReader;
 
 public class RunShop {
     private static Map<String, User> users_list = new HashMap<>();
@@ -40,35 +43,102 @@ public class RunShop {
 
         return user;
     }
+
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         // Make user with create user
-        // User user1 = createUser();
-        // store the created user
+        // User user1 = createUser(); //when enter information by hand
+
         //Test user
         User user1 = new User("Seb", "Lev", 500.25, 0, true, "Seb1", "123");
         users_list.put(user1.getUsername(), user1);
 
+        //path //TO BE CHANGED FOR WHEN RUNNING CODE
+        String user_file= "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
+        try {
+            // Create a FileReader object to read the CSV file
+            FileReader fileReader = new FileReader(user_file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line = bufferedReader.readLine();
+            // Read the CSV file line by line
+            while ((line = bufferedReader.readLine()) != null) {
+                // Split the line into fields using the comma as a delimiter
+                String[] fields = line.split(",");
+
+                // Extract information from the fields
+                String firstName = fields[1];
+                //System.out.println(firstName);
+
+                String lastName = fields[2];
+                //System.out.println(lastName);
+
+                double budget = Double.parseDouble(fields[3]);
+                //System.out.println(budget);
+
+                int carsPurchased = Integer.parseInt(fields[4]);
+
+                boolean minerCarsMember = Boolean.parseBoolean(fields[5]);
+                String username = fields[6];
+                String password = fields[7];
+
+                // Create a new User object using the extracted information
+                User newUser = new User(firstName, lastName, budget, carsPurchased, minerCarsMember, username, password);
+
+                //add user to map
+                users_list.put(newUser.getUsername(), newUser);
+
+                // print line for testing
+                System.out.println("New user created: " + newUser.getFirstName() + " " + newUser.getLastName());
+            }
+            // Close the BufferedReader
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         boolean is_user = login();
         if (is_user){
-            System.out.println("Options:");
-            System.out.println("1. Display all cars? (y/n)");
-            System.out.println("2. Filter cars? (y/n)");
+            while (true) {
+                System.out.println("Menu");
+                System.out.println("1. Display all cars? (y/n)");
 
-            // Take user input for options
-            System.out.print("Enter option 1: ");
-            boolean displayAllCars = scanner.nextLine().equalsIgnoreCase("y");
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("Exit")) {
+                    System.out.println("Exiting...");
+                    break; // Exit
+                }
+                boolean displayAllCars = input.equalsIgnoreCase("y");
 
-            System.out.print("Enter option 2: ");
-            boolean filterCars = scanner.nextLine().equalsIgnoreCase("y");
+                if (displayAllCars) {
+                    System.out.println("2. Filter cars? (y/n)");
+                    input = scanner.nextLine();
+                    if (input.equalsIgnoreCase("Exit")) {
+                        System.out.println("Exiting...");
+                        break;
+                    }
+                    boolean filterCars = input.equalsIgnoreCase("y");
 
-            // Need to add display cars and filter methods
-            System.out.println("Display all cars: " + displayAllCars);
-            System.out.println("Filter cars: " + filterCars);
+                    // Call method to display and filter cars based on user input
+                    if (filterCars) {
+                        // Call method to filter cars
+                        // filterCarsMethod();
+                        System.out.println("Filtering cars...");
+                    } else {
+                        // Call method to display all cars
+                        // displayAllCarsMethod();
+                        System.out.println("Displaying all cars...");
+                    }
+                } else {
+                    // Do nothing if the user chose not to display all cars
+                    System.out.println("No cars to display.");
+                }
+            }
+
+            scanner.close(); // Close the scanner when done
         }
-
-
     }
+
 
     public static boolean login() {
         // Get user input for username and password
@@ -93,5 +163,10 @@ public class RunShop {
         }
         return false;
     }
+
 }
+
+
+
+
 
