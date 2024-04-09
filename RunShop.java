@@ -166,7 +166,6 @@ public class RunShop {
                     System.out.println("Signing out...");
                     break;
                 }
-
             }
 
             //purchase_remove(input_ID);
@@ -381,6 +380,7 @@ public class RunShop {
     }
 
     public static void create_new_user_data() {
+        //**this should be changed for use
         String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(new_user_data))) {
             // Write CSV header
