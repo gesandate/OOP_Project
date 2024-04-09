@@ -174,50 +174,70 @@ public class RunShop {
         }
     }
 
+
+    /**
+     * This method creates a new User object by prompting the user to input their information.
+     *
+     * @return The newly created User object with the user's information.
+     */
     public static User createUser() {
         Scanner scanner = new Scanner(System.in);
         User user = new User();
 
+        // Prompt for and set first name
         System.out.print("Enter first name: ");
         String firstName = scanner.nextLine();
         user.setFirstName(firstName);
 
+        // Prompt for and set last name
         System.out.print("Enter last name: ");
         String lastName = scanner.nextLine();
         user.setLastName(lastName);
 
+        // Prompt for and set budget
         System.out.print("Enter budget: ");
         double budget = scanner.nextDouble();
         user.setBudget(budget);
 
+        // Prompt for and set number of cars purchased
         System.out.print("Enter number of cars purchased: ");
         int carsPurchased = scanner.nextInt();
         user.setCarsPurchased(carsPurchased);
 
+        // Prompt for and set Miner Cars membership
         System.out.print("Are you a Miner Cars member? (y/n): ");
         boolean member = scanner.nextLine().equalsIgnoreCase("y");
         user.setMembership(member);
 
-        scanner.nextLine();
+        scanner.nextLine(); // Consume newline
+        // Prompt for and set username
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
         user.setUsername(username);
 
+        // Prompt for and set password
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
         user.setPassword(password);
 
+        // Return the created User object
         return user;
     }
 
+    /**
+     * Attempts to log in a user with the given username and password.
+     *
+     * @param username The username of the user attempting to log in.
+     * @param password The password of the user attempting to log in.
+     * @return true if the login attempt is successful, false otherwise.
+     */
     public static boolean login(String username, String password) {
-        // Check if the entered username exists and if the password matches
+        // Check if the entered username exist and if the password matches
         if (users_list.containsKey(username)) {
             User currentUser = users_list.get(username);
             if (currentUser.getPassword().equals(password)) {
                 System.out.println(STR."Welcome \{username}");
                 return true;
-                // You can perform further actions with the logged in
             } else {
                 System.out.println("Invalid password. Try again.");
             }
@@ -227,6 +247,9 @@ public class RunShop {
         return false;
     }
 
+    /**
+     * Reads car information from a file and adds cars to the car list.
+     */
     public static void add_cars(){
         try{
             // Create BufferedReader object
@@ -264,6 +287,12 @@ public class RunShop {
         }
     }
 
+    /**
+     * Displays cars based on the given condition and budget criteria.
+     *
+     * @param condition The condition of the car to display. Pass "null" to display all cars.
+     * @param budget    The maximum budget for the car. Pass 0 to ignore budget criteria.
+     */
     public static void displayCars(String condition, double budget) {
         // Display header
         System.out.println("ID\tCar Type\tModel\tCondition\tColor\tFuel Type\tCapacity\tTransmission\tMileage\tVIN\tPrice");
@@ -294,7 +323,14 @@ public class RunShop {
         }
     } //need to add avalibility to display
 
-    //checks if requirnments for purchase are met
+
+    /**
+     * Checks if a car with the given ID can be purchased by the current user.
+     *
+     * @param id   The ID of the car to be purchased.
+     * @param curr The current user attempting to purchase the car.
+     * @return true if the car can be purchased, false otherwise.
+     */
     public static boolean purchase_car_check(int id, User curr){
         for (Car car : car_list.values()) {
             if (car.getID() == id){
@@ -316,6 +352,11 @@ public class RunShop {
         return false;
     }
 
+    /**
+     * Removes a purchased car from the car data file.
+     *
+     * @param id The ID of the car to be removed.
+     */
     public static void purchase_remove(int id){
         //**CHANGE WHERE OUTPUT FILE IS MADE**//
         String outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
@@ -347,6 +388,12 @@ public class RunShop {
         }
     }
 
+    /**
+     * Adds a ticket (ID) to the specified user's entry in the tickets map.
+     *
+     * @param username The username of the user to whom the ticket will be added.
+     * @param input_ID The ID of the ticket to be added.
+     */
     public static void add_Ticket(String username, int input_ID) {
         if (tickets.containsKey(username)) {
             //  append id to array
