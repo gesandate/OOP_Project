@@ -18,7 +18,9 @@ public class User extends Person{
         this.password        = "NULL";
     }
     public User(String firstName, String lastName, Double budget, Integer carsPurchased, Boolean minerCarsMember, String username, String password){
-        super(firstName, lastName);
+        //super(firstName, lastName);
+        this.firstName       = firstName;
+        this.lastName        = lastName;
         this.budget          = budget;
         this.carsPurchased   = carsPurchased;
         this.minerCarsMember = minerCarsMember;

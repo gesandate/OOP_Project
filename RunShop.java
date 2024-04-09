@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RunShop {
     private static Map<String, User> users_list = new HashMap<>();
@@ -12,44 +16,11 @@ public class RunShop {
     //this will be used to get car info and when editing car_data
     private static HashMap<Integer, Car> car_list = new HashMap<>();
     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/car_data.csv";
+    private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
     //This will be the log file of all users actions
     private static final String logFile = "log.txt";
-    public static User createUser() {
-        Scanner scanner = new Scanner(System.in);
-        User user = new User();
 
-        System.out.print("Enter first name: ");
-        String firstName = scanner.nextLine();
-        user.setFirstName(firstName);
-
-        System.out.print("Enter last name: ");
-        String lastName = scanner.nextLine();
-        user.setLastName(lastName);
-
-        System.out.print("Enter budget: ");
-        double budget = scanner.nextDouble();
-        user.setBudget(budget);
-
-        System.out.print("Enter number of cars purchased: ");
-        int carsPurchased = scanner.nextInt();
-        user.setCarsPurchased(carsPurchased);
-
-        System.out.print("Are you a Miner Cars member? (y/n): ");
-        boolean member = scanner.nextLine().equalsIgnoreCase("y");
-        user.setMembership(member);
-
-        scanner.nextLine();
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine();
-        user.setUsername(username);
-
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
-        user.setPassword(password);
-
-        return user;
-    }
-
+    private static HashMap<String, int[]> tickets = new HashMap<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -60,7 +31,7 @@ public class RunShop {
         User user1 = new User("Seb", "Lev", 17293.00, 0, true, "Seb1", "123");
         users_list.put(user1.getUsername(), user1);
 
-        String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
+        //String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
         try {
             // Create a FileReader object to read the CSV file
             FileReader fileReader = new FileReader(user_file);
@@ -113,9 +84,8 @@ public class RunShop {
         if (is_user){
             User curr = users_list.get(username);
             while (true) {
-                System.out.println("Menu");
+                System.out.println("Menu");//change this in order of options
                 System.out.println("1. Display all cars? (y/n)");
-
                 String input = scanner.nextLine();
                 if (input.equalsIgnoreCase("Exit")) {
                     System.out.println("Exiting...");
@@ -138,7 +108,7 @@ public class RunShop {
                     }else if (input.equalsIgnoreCase("n")) {
                         System.out.println("Display call cars");
                         displayCars(new_used, -1);
-                        break;
+                        //break;
                     }
 
                     System.out.println("3. Filter cars by budget? (y/n)");
@@ -154,7 +124,7 @@ public class RunShop {
                             budget = curr.getBudget();
                             System.out.println(curr.getUsername()+" current budget: "+budget);
                             displayCars(new_used, budget);
-                            break;
+                            //break; //for testing
                         } catch (NumberFormatException e) {
                             System.out.println("Something wrong with budget contact admin");
                             continue; // loop
@@ -162,7 +132,7 @@ public class RunShop {
 
                     }else{
                         displayCars(new_used, 0);
-                        break;
+                        //break;
                     }
                     //System.out.println("END OF IF display section");
                     //displayCars(new_used, budget);
@@ -173,15 +143,73 @@ public class RunShop {
                 //add puchase part
                 System.out.println("3. Purchase Car");
                 System.out.println("Enter the ID of the car");
-                String input_ID = scanner.nextLine();
-                //purchase_car_check(input_ID,curr);
+                int input_ID = scanner.nextInt();
+                boolean check = purchase_car_check(input_ID,curr);
+                if (check){
+                    purchase_remove(input_ID);
+                    add_Ticket(curr.getUsername(), input_ID);
+                    int cars_pur =curr.getCarsPurchased();
+                    curr.setCarsPurchased(cars_pur+1);
+                    users_list.put(curr.getUsername(), curr);
+                }
+                System.out.println("4. View Tickets (y/n)");
+                String input_tic = scanner.nextLine();
+                if (input.equalsIgnoreCase("Exit")) {
+                    System.out.println("Exiting...");
+                    break; // Exit
+                } else if (input.equalsIgnoreCase("y")) {
+                    print_Tickets(curr.getUsername());
+                }
+                System.out.println("5. Sign out (exit/n)");
+                String input_e = scanner.nextLine();
+                if (input_e.equalsIgnoreCase("exit")) {
+                    System.out.println("Signing out...");
+                    break;
+                }
 
             }
 
+            //purchase_remove(input_ID);
+            create_new_user_data();
             scanner.close(); // Close the scanner when done
         }
     }
 
+    public static User createUser() {
+        Scanner scanner = new Scanner(System.in);
+        User user = new User();
+
+        System.out.print("Enter first name: ");
+        String firstName = scanner.nextLine();
+        user.setFirstName(firstName);
+
+        System.out.print("Enter last name: ");
+        String lastName = scanner.nextLine();
+        user.setLastName(lastName);
+
+        System.out.print("Enter budget: ");
+        double budget = scanner.nextDouble();
+        user.setBudget(budget);
+
+        System.out.print("Enter number of cars purchased: ");
+        int carsPurchased = scanner.nextInt();
+        user.setCarsPurchased(carsPurchased);
+
+        System.out.print("Are you a Miner Cars member? (y/n): ");
+        boolean member = scanner.nextLine().equalsIgnoreCase("y");
+        user.setMembership(member);
+
+        scanner.nextLine();
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        user.setUsername(username);
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+        user.setPassword(password);
+
+        return user;
+    }
 
     public static boolean login(String username, String password) {
         // Check if the entered username exists and if the password matches
@@ -265,7 +293,7 @@ public class RunShop {
                         car.getVIN()+ "\t" +car.getPrice());
             }
         }
-    }
+    } //need to add avalibility to display
 
     //checks if requirnments for purchase are met
     public static boolean purchase_car_check(int id, User curr){
@@ -275,22 +303,113 @@ public class RunShop {
                     if (car.getAvailability()>=1){
                         return true;
                     }else{
+
+                        int old_a = car.getAvailability();
+                        car.setAvailability(old_a-1);
+                        car_list.put(id,car);
                         System.out.println("Car selected is not in stock");
                     }
                 }else{
                     System.out.println("Car selected is outside of budget");
                 }
-            }else {
-                System.out.println("Not vaild Car ID");
             }
         }
         return false;
     }
 
+    public static void purchase_remove(int id){
+        //**CHANGE WHERE OUTPUT FILE IS MADE**//
+        String outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
+        try (BufferedReader reader = new BufferedReader(new FileReader(car_file));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+
+            String first_line = reader.readLine();
+
+            String line;
+            List<String[]> updatedLines = new ArrayList<>();
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                int id_file = Integer.parseInt(parts[0]);
+                if (id_file ==id) { // Found the id
+                    int carsAvailable = Integer.parseInt(parts[parts.length - 1]);
+                    carsAvailable--;
+                    parts[parts.length - 1] = String.valueOf(carsAvailable);
+                }
+                updatedLines.add(parts);
+            }
+            for (String[] parts : updatedLines) {
+                writer.write(String.join(",", parts));
+                writer.newLine();
+            }
+            System.out.println("New CSV file created: " + outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void add_Ticket(String username, int input_ID) {
+        if (tickets.containsKey(username)) {
+            //  append id to array
+            int[] old_IDs = tickets.get(username);
+            int[] new_IDs = new int[old_IDs.length + 1];
+            System.arraycopy(old_IDs, 0, new_IDs, 0, old_IDs.length);
+            new_IDs[old_IDs.length] = input_ID;
+            tickets.put(username, new_IDs);
+        } else {
+            // not in Tickets so create new
+            tickets.put(username, new int[]{input_ID});
+        }
+    }
+
+    public static void print_Tickets(String username) {
+        if (tickets.containsKey(username)) {
+            System.out.print(STR."\{username} ticket(s): ");
+            for (int id : tickets.get(username)) {
+                Car car = car_list.get(id);
+                if(car != null){ //check if car was added/removed from car_list
+                    System.out.println("Car ID: "+ id);
+                    System.out.println("Car Type: " + car.getCarType() );
+                    System.out.println("Model: " + car.getModel());
+                    System.out.println("Color: " + car.getColor());
+                }
+            }
+            System.out.println("\n");
+        } else {
+            System.out.println("No tickets for user " + username);
+        }//lol
+    }
+
+    public static void create_new_user_data() {
+        String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new_user_data))) {
+            // Write CSV header
+            writer.write("ID,First Name,Last Name,Money Available,Cars Purchased,MinerCars Membership,Username,Password");
+            writer.newLine();
+            int id = 1;
+            // iterate for all users
+            for (User user : users_list.values()) {
+                // format for csv
+                String userData = String.format("%d,%s,%s,%.2f,%d,%b,%s,%s",
+                        id,user.getFirstName(), user.getLastName(), user.getBudget(),
+                        user.getCarsPurchased(), user.getMembership(), user.getUsername(), user.getPassword());
+                id = 1+id;
+                writer.write(userData);
+                writer.newLine();
+            }
+            System.out.println("New user data file created: " + new_user_data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
 
+
+
+
+//-_-
 
 
 
