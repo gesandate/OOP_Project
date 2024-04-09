@@ -1,4 +1,3 @@
-package Project;
 /**
  * This is an admin person in the system
  * The admin class extends the person class adding the admin methods
