@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * 
+ * Class that manages users, actions, data, and logging.
+ */
 public class RunShop {
     private static Map<String, User> users_list = new HashMap<>();
     //path //TO BE CHANGED FOR WHEN RUNNING CODE
@@ -14,6 +18,12 @@ public class RunShop {
     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/car_data.csv";
     //This will be the log file of all users actions
     private static final String logFile = "log.txt";
+    
+    /**
+     * Method to create new users
+     * 
+     * @return the new user object
+     */
     public static User createUser() {
         Scanner scanner = new Scanner(System.in);
         User user = new User();
@@ -51,6 +61,10 @@ public class RunShop {
     }
 
 
+    /**
+     * 
+     * Main method where the program starts executing
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         // Make user with create user
@@ -177,6 +191,13 @@ public class RunShop {
     }
 
 
+    /**
+     * Method to log a user in.
+     * 
+     * @param username the user's username
+     * @param password the password the user entered
+     * @return true if password matches username, false othterwise
+     */
     public static boolean login(String username, String password) {
         // Check if the entered username exists and if the password matches
         if (users_list.containsKey(username)) {
@@ -194,6 +215,10 @@ public class RunShop {
         return false;
     }
 
+    /**
+     * 
+     * Method to add cars to the cars list
+     */
     public static void add_cars(){
         try{
             // Create BufferedReader object
@@ -231,6 +256,12 @@ public class RunShop {
         }
     }
 
+    /**
+     * Method to display the cars
+     * 
+     * @param condition the condition of the cars displayed
+     * @param budget the user's budget so that you can filter according to budget
+     */
     public static void displayCars(String condition, double budget) {
         // Display header
         System.out.println("ID\tCar Type\tModel\tCondition\tColor\tFuel Type\tCapacity\tTransmission\tMileage\tVIN\tPrice");
