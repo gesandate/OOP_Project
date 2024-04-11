@@ -1,19 +1,12 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class RunShop {
     private static Map<String, User> users_list = new HashMap<>();
     //path //TO BE CHANGED FOR WHEN RUNNING CODE
     //private static final String user_file= "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
     //this will be used to get car info and when editing car_data
+
     private static HashMap<Integer, Car> car_list = new HashMap<>();
     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/car_data.csv";
     private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/user_data.csv";
@@ -66,7 +59,7 @@ public class RunShop {
                 users_list.put(newUser.getUsername(), newUser);
 
                 // print line for testing
-                System.out.println("New user created: " + newUser.getFirstName() + " " + newUser.getLastName());
+                //System.out.println("New user created: " + newUser.getFirstName() + " " + newUser.getLastName());
             }
             // Close the BufferedReader
             bufferedReader.close();
@@ -80,48 +73,50 @@ public class RunShop {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
         boolean is_user = login(username,password);
-
+        Log main_log = new Log();
         if (is_user){
             User curr = users_list.get(username);
+            main_log.logAction(curr, "login", logFile);
             while (true) {
                 System.out.println("Menu");//change this in order of options
                 System.out.println("1. Display all cars? (y/n)");
-                String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("Exit")) {
+                String input_dis = scanner.nextLine();
+                if (input_dis.equalsIgnoreCase("Exit")) {
                     System.out.println("Exiting...");
                     break; // Exit
                 }
-                boolean displayAllCars = input.equalsIgnoreCase("y");
+                boolean displayAllCars = input_dis.equalsIgnoreCase("y");
 
                 if (displayAllCars) {
                     //call add cars before display cars
                     add_cars();
                     System.out.println("2. Filter cars by new or used? (new/used/n)");
-                    input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("Exit")) {
+                    String input_fil = scanner.nextLine();
+                    if (input_fil.equalsIgnoreCase("Exit")) {
                         break; // Exit the program
                     }
 
                     String new_used = "null";
-                    if (input.equalsIgnoreCase("new") || input.equalsIgnoreCase("used")) {
-                        new_used = input.toLowerCase();
-                    }else if (input.equalsIgnoreCase("n")) {
+                    if (input_fil.equalsIgnoreCase("new") || input_fil.equalsIgnoreCase("used")) {
+                        new_used = input_fil.toLowerCase();
+                    }else if (input_fil.equalsIgnoreCase("n")) {
                         System.out.println("Display call cars");
                         displayCars(new_used, -1);
                         //break;
                     }
 
                     System.out.println("3. Filter cars by budget? (y/n)");
-                    input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("Exit")) {
+                    String input_bud = scanner.nextLine();
+                    if (input_bud.equalsIgnoreCase("Exit")) {
                         break;
                     }
-                    boolean filterByBudget = input.equalsIgnoreCase("y");
+                    boolean filterByBudget = input_bud.equalsIgnoreCase("y");
 
                     Double budget = null;
                     if (filterByBudget) {
                         try {
                             budget = curr.getBudget();
+                            //here need to -6.25% and if member +10%
                             System.out.println(curr.getUsername()+" current budget: "+budget);
                             displayCars(new_used, budget);
                             //break; //for testing
@@ -140,25 +135,45 @@ public class RunShop {
                     // Do nothing if the user chose not to display all cars
                     System.out.println("No cars to display.");
                 }
-                //add puchase part
-                System.out.println("3. Purchase Car");
-                System.out.println("Enter the ID of the car");
-                int input_ID = scanner.nextInt();
-                boolean check = purchase_car_check(input_ID,curr);
-                if (check){
-                    purchase_remove(input_ID);
-                    add_Ticket(curr.getUsername(), input_ID);
-                    int cars_pur =curr.getCarsPurchased();
-                    curr.setCarsPurchased(cars_pur+1);
-                    users_list.put(curr.getUsername(), curr);
+                //
+                System.out.println("3. Purchase Car (y/n)");
+                String input = scanner.nextLine();
+                boolean purchase_input = input.equalsIgnoreCase("y");
+                if (purchase_input) {
+                    System.out.println("Enter the ID of the car");
+                    try {
+                        int input_ID = scanner.nextInt();
+                        boolean check = purchase_car_check(input_ID, curr);
+                        if (check) {
+                            //puchase if possible
+                            purchase_remove(input_ID);
+                            //make a tick for car purchase
+                            add_Ticket(curr.getUsername(), input_ID);
+                            int cars_pur = curr.getCarsPurchased();
+                            //increase the number of cars purchased by user in users_list
+                            curr.setCarsPurchased(cars_pur + 1);
+                            users_list.put(curr.getUsername(), curr);
+                            //get price of car purchased
+                            double car_price_paid = (car_list.get(input_ID)).getPrice();//tax here?
+                            //set new budget of user
+                            curr.setBudget(curr.getBudget() - car_price_paid);
+                            users_list.put(curr.getUsername(), curr);
+                        } else {
+                            System.out.println("ID does not exist");
+                        }
+                        System.out.println();
+                    }catch (InputMismatchException e) {
+                        System.out.println("Did not enter a valid numerical ID");
+                        scanner.next();
+                    }
                 }
                 System.out.println("4. View Tickets (y/n)");
                 String input_tic = scanner.nextLine();
-                if (input.equalsIgnoreCase("Exit")) {
-                    System.out.println("Exiting...");
-                    break; // Exit
-                } else if (input.equalsIgnoreCase("y")) {
+                boolean show_tics = input_tic.equalsIgnoreCase("y");
+                if(show_tics) {
                     print_Tickets(curr.getUsername());
+                }else{
+                    System.out.println("\n");
                 }
                 System.out.println("5. Sign out (exit/n)");
                 String input_e = scanner.nextLine();
@@ -257,6 +272,10 @@ public class RunShop {
             reader.readLine();
             // Read each lin of the file
             String line;
+
+            //if parts[i].eqals( "id".equalsIgnoreCase()){
+            //    int id_place =  i;
+            //}
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
 
@@ -334,6 +353,7 @@ public class RunShop {
     public static boolean purchase_car_check(int id, User curr){
         for (Car car : car_list.values()) {
             if (car.getID() == id){
+                //new price depending on tax and membership
                 if (curr.getBudget() >= car.getPrice()){
                     if (car.getAvailability()>=1){
                         return true;
