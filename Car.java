@@ -16,6 +16,7 @@ public class Car{
     private String color;
     private String condition;
     private String VIN;
+    private Boolean hasTurbo;
 
     /**
      * 
@@ -31,6 +32,7 @@ public class Car{
      * @param color         the car's color
      * @param condition     the condition the car is in
      * @param VIN           the car's VIN number
+     * @param hasTurbo      the indicator if car has a turbo
      */
     public Car(){
         this.carType       = "Hatchback";
@@ -45,6 +47,7 @@ public class Car{
         this.color         = "White";
         this.condition     = "New";
         this.VIN           = "NULL";
+        this.hasTurbo      = false;
     }
 
     /**
@@ -61,9 +64,10 @@ public class Car{
      * @param color         the car's color
      * @param condition     the condition the car is in
      * @param VIN           the car's VIN number
+     * @param hasTurbo      the indicator if car has a turbo
      */
     public Car(String carType, String model, int ID, int availability, double price, String fuelType, int capacity,
-               String transmission, int mileage, String color, String condition, String VIN) {
+               String transmission, int mileage, String color, String condition, String VIN, Boolean hasTurbo) {
         this.carType = carType;
         this.model = model;
         this.ID = ID;
@@ -76,6 +80,7 @@ public class Car{
         this.color = color;
         this.condition = condition;
         this.VIN = VIN;
+        this.hasTurbo = hasTurbo;
     }
 
     /**
