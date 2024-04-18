@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
@@ -10,10 +11,17 @@ public class RunShop {
     //CSV_helper run_csv = new CSV_helper();
 
     private static HashMap<Integer, Car> car_list = new HashMap<>();
+    /*
     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
     private static String car_outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
     private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/user_data.csv";
     private static String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
+    */
+    private static final String car_file = "C:/Users/gibbs/Downloads/car_data(1).csv";
+    private static String car_outputFile = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newCarFile.csv";
+    private static final String user_file = "C:/Users/gibbs/Downloads/user_data.csv";
+    private static String new_user_data = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newUserFile.csv";
+
     //This will be the log file of all users actions
     private static final String logFile = "log.txt";
 
@@ -206,7 +214,7 @@ public class RunShop {
         if (users_list.containsKey(username)) {
             User currentUser = users_list.get(username);
             if (currentUser.getPassword().equals(password)) {
-                System.out.println(STR."Welcome \{username}");
+                System.out.println("Welcome" + username);
                 return true;
             } else {
                 System.out.println("Invalid password. Try again.");
@@ -308,7 +316,7 @@ public class RunShop {
 
     public static void print_Tickets(String username) {
         if (tickets.containsKey(username)) {
-            System.out.print(STR."\{username} ticket(s): ");
+            System.out.print("username ticket(s): S");
             for (int id : tickets.get(username)) {
                 Car car = car_list.get(id);
                 if(car != null){ //check if car was added/removed from car_list
@@ -322,6 +330,32 @@ public class RunShop {
         } else {
             System.out.println("No tickets for user " + username);
         }//lol
+    }
+
+    public static void adminRun(){
+        Scanner scanner = new Scanner(System.in);
+        int input = scanner.nextInt();
+
+        switch (input) {
+            case (1):
+                System.out.println("Add Car?");
+                break;
+            case (2):
+                System.out.println("Remove Car?");
+                //sacn input id
+                //tickets.put("Admin",[id]);
+                String uInput = scanner.nextLine();
+                //File newFile = new File(uInput + ".csv");
+                String new_file = uInput + ".csv";
+                CSV_helper.purchase_remove(new_file, car_file, tickets);
+                break;
+
+            default:
+                System.out.println("Wrong");
+                break;
+        }
+        scanner.close();
+
     }
 
 
