@@ -271,7 +271,7 @@ public class RunShop {
                 //new price depending on tax and membership
                 double car_price = car.getPrice();
                 if(curr.getMembership()){
-                    car_price = car_price * .9;//10%
+                    car_price = car_price * .9;//10% 1
                 }
                 double car_price_w_tax =car_price* 1.0625;
                 if (curr.getBudget() >= car_price_w_tax){
