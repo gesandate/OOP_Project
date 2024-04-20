@@ -7,7 +7,7 @@ public class RunShop {
     static Map<String, User> users_list = new HashMap<>();
     //path //TO BE CHANGED FOR WHEN RUNNING CODE
     //this will be used to get car info and when editing car_data
-    //CSV_helper run_csv = new CSV_helper();
+
 
     private static HashMap<Integer, Car> car_list = new HashMap<>();
     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
@@ -25,7 +25,7 @@ public class RunShop {
         // User user1 = createUser(); //when enter information by hand
         users_list =CSV_helper.user_map_from_csv(user_file, (HashMap<String, User>) users_list);
         //Test user
-        User user1 = new User("Seb", "Lev", 17293.00, 0, true, "Seb1", "123");
+        User user1 = new User("Seb", "Lev", 50000.00, 0, true, "Seb1", "123");
         users_list.put(user1.getUsername(), user1);
 
         car_list = CSV_helper.cars_map_from_csv(car_file, car_list);
@@ -104,14 +104,11 @@ public class RunShop {
                             System.out.println("Enter the ID of the car");
                             try {
                                 int input_ID = scanner.nextInt();
-                                boolean check = purchase_car_check(input_ID, curr);
+                                boolean check = purchase_car(input_ID, curr);
                                 if (check) {
 
-                                    //purchase_remove(input_ID);
                                     //make a tick for car purchase
                                     add_Ticket(curr.getUsername(), input_ID);
-                                    int cars_pur = curr.getCarsPurchased();
-                                    //increase the number of cars purchased by user in users_list
 
                                 } else {
                                     System.out.println("ID does not exist");
@@ -129,7 +126,22 @@ public class RunShop {
                         break;
                     case "5":
                         //car return
+                        int input_ID = -1;
+                        boolean isValid_Input = false;
 
+                        while (!isValid_Input) {
+                            System.out.println("Enter ID of the car you wish to return:");
+                            // Check if the next input is an integer
+                            if (scanner.hasNextInt()) {
+                                input_ID = scanner.nextInt();
+                                isValid_Input = true;
+                            } else {
+                                scanner.next();
+                                System.out.println("Invalid input. Please enter a valid integer ID.");
+                            }
+                        }
+
+                        car_return(curr, input_ID);
                     case "6":
                         // Sign out
                         CSV_helper.purchase_remove(car_outputFile,car_file,tickets);
@@ -208,7 +220,7 @@ public class RunShop {
         if (users_list.containsKey(username)) {
             User currentUser = users_list.get(username);
             if (currentUser.getPassword().equals(password)) {
-                System.out.println(STR."Welcome \{username}");
+                System.out.println("Welcome "+username);
                 return true;
             } else {
                 System.out.println("Invalid password. Try again.");
@@ -265,7 +277,7 @@ public class RunShop {
      * @param curr The current user attempting to purchase the car.
      * @return true if the car can be purchased, false otherwise.
      */
-    public static boolean purchase_car_check(int id, User curr){
+    public static boolean purchase_car(int id, User curr){
         for (Car car : car_list.values()) {
             if (car.getID() == id){
                 //new price depending on tax and membership
@@ -350,9 +362,34 @@ public class RunShop {
                 }
             }
             //"Sedan" == (car_list.get(id)).getCarType();
-            //for( index_remove){
-            //    if (id )
-            //}
+            if( index_remove == -1){
+                System.out.println("User did not purchase car with ID");
+            }else {
+                int[] new_ids = new int[ids.length-1];
+                System.arraycopy(ids, 0, new_ids, 0, index_remove);
+                for( int i=index_remove;i< ids.length;i++){
+                    new_ids[i] = ids[i];
+                }
+                //updated tickets
+                tickets.put(curr.getUsername(),new_ids);
+                Car car = car_list.get(id_remove);
+                int old_a = car.getAvailability();
+                car.setAvailability(old_a+1);
+                car_list.put(id_remove,car);
+
+                int cars_pur = curr.getCarsPurchased();
+                //increase the number of cars purchased by user in users_list
+                curr.setCarsPurchased(cars_pur - 1);
+                users_list.put(curr.getUsername(), curr);
+                //set new budget of user
+                double car_price = car.getPrice();
+                if(curr.getMembership()){
+                    car_price = car_price * .9;//10% 1
+                }
+                double car_price_w_tax =car_price* 1.0625;
+                curr.setBudget(curr.getBudget() - car_price_w_tax);
+                users_list.put(curr.getUsername(), curr);
+            }
 
         }else{
             System.out.println("User had no tickets");
