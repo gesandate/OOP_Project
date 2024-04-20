@@ -4,8 +4,8 @@
  */
 public class User extends Person{
 
-    private String  firstName;
-    private String  lastName;
+    //private String  firstName;
+    //private String  lastName;
     private double  budget;
     private int     carsPurchased;
     private boolean minerCarsMember;
@@ -24,18 +24,18 @@ public class User extends Person{
 
     /**
      * 
-     * @param firstName         the user's first name
-     * @param lastName          the user's last name
+     * @param FName         the user's first name
+     * @param LName          the user's last name
      * @param budget            the user's budget
      * @param carsPurchased     the amount of cars the user previously purchased
      * @param minerCarsMember   the membership status of the user
      * @param username          the user's username
      * @param password          the user's password
      */
-    public User(String firstName, String lastName, Double budget, Integer carsPurchased, Boolean minerCarsMember, String username, String password){
-        //super(firstName, lastName);
-        this.firstName       = firstName;
-        this.lastName        = lastName;
+    public User(String FName, String LName, Double budget, Integer carsPurchased, Boolean minerCarsMember, String username, String password){
+        super(FName, LName);
+        //this.firstName       = firstName;
+        //this.lastName        = lastName;
         this.budget          = budget;
         this.carsPurchased   = carsPurchased;
         this.minerCarsMember = minerCarsMember;
@@ -50,38 +50,27 @@ public class User extends Person{
     /**
      * Sets the first name for the user.
      * 
-     * @param firstName the first name to set for the user
+     * @param FName the first name to set for the user
      */
-    public void setFirstName(String firstName){
-        this.firstName = firstName;
-    }
+    //public void setFName(String FName){
+    //    this.FName = FName;
+    //}
 
     /**
      * Gets the user's first name
      * 
      * @return the user's first name as a String
      */
-    public String getFirstName(){
-        return this.firstName;
-    }
+    //public String getFName(){
+    //    return this.FName;
+    //}
 
     /**
      * Sets the last name for the user
      * 
      * @param lastName the last name to set for the user.
      */
-    public void setLastName(String lastName){
-        this.lastName = lastName;
-    }
 
-    /**
-     * Gets the user's last name
-     * 
-     * @return the user's last name as a String
-     */
-    public String getLastName(){
-        return this.lastName;
-    }
 
     /**
      * Sets the budget for the user

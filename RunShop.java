@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
@@ -11,17 +10,10 @@ public class RunShop {
     //CSV_helper run_csv = new CSV_helper();
 
     private static HashMap<Integer, Car> car_list = new HashMap<>();
-    /*
     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
     private static String car_outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
     private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/user_data.csv";
     private static String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
-    */
-    private static final String car_file = "C:/Users/gibbs/Downloads/car_data(1).csv";
-    private static String car_outputFile = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newCarFile.csv";
-    private static final String user_file = "C:/Users/gibbs/Downloads/user_data.csv";
-    private static String new_user_data = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newUserFile.csv";
-
     //This will be the log file of all users actions
     private static final String logFile = "log.txt";
 
@@ -43,6 +35,10 @@ public class RunShop {
         String username = scanner.nextLine();
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
+        //if (username.equalsIgnoreCase("admin"){
+            //call admin_method
+        //}
+
         boolean is_user = login(username,password);
         Log main_log = new Log();
         if (is_user){
@@ -54,7 +50,8 @@ public class RunShop {
                 System.out.println("2. Filter cars ");
                 System.out.println("3. Purchase Car");
                 System.out.println("4. View Tickets");
-                System.out.println("5. Sign out");
+                System.out.println("5. Car Return");
+                System.out.println("6. Sign out");
                 String menu_input = scanner.nextLine();
                 switch (menu_input) {
                     case "1":
@@ -115,13 +112,7 @@ public class RunShop {
                                     add_Ticket(curr.getUsername(), input_ID);
                                     int cars_pur = curr.getCarsPurchased();
                                     //increase the number of cars purchased by user in users_list
-                                    curr.setCarsPurchased(cars_pur + 1);
-                                    users_list.put(curr.getUsername(), curr);
-                                    //get price of car purchased
-                                    double car_price_paid = (car_list.get(input_ID)).getPrice();//tax here?
-                                    //set new budget of user
-                                    curr.setBudget(curr.getBudget() - car_price_paid);
-                                    users_list.put(curr.getUsername(), curr);
+
                                 } else {
                                     System.out.println("ID does not exist");
                                 }
@@ -137,6 +128,9 @@ public class RunShop {
                         print_Tickets(curr.getUsername());
                         break;
                     case "5":
+                        //car return
+
+                    case "6":
                         // Sign out
                         CSV_helper.purchase_remove(car_outputFile,car_file,tickets);
                         CSV_helper.create_new_user_data(new_user_data, (HashMap<String, User>) users_list);
@@ -165,12 +159,12 @@ public class RunShop {
         // Prompt for and set first name
         System.out.print("Enter first name: ");
         String firstName = scanner.nextLine();
-        user.setFirstName(firstName);
+        user.setFName(firstName);
 
         // Prompt for and set last name
         System.out.print("Enter last name: ");
         String lastName = scanner.nextLine();
-        user.setLastName(lastName);
+        user.setLName(lastName);
 
         // Prompt for and set budget
         System.out.print("Enter budget: ");
@@ -214,7 +208,7 @@ public class RunShop {
         if (users_list.containsKey(username)) {
             User currentUser = users_list.get(username);
             if (currentUser.getPassword().equals(password)) {
-                System.out.println("Welcome" + username);
+                System.out.println(STR."Welcome \{username}");
                 return true;
             } else {
                 System.out.println("Invalid password. Try again.");
@@ -235,7 +229,7 @@ public class RunShop {
      */
     public static void displayCars(String condition, double budget) {
         // Display header
-        System.out.println("ID\tCar Type\tModel\tCondition\tColor\tFuel Type\tCapacity\tTransmission\tMileage\tVIN\tPrice");
+        System.out.println("ID\tCar Type\tModel\tCondition\tColor\tFuel Type\tCapacity\tTransmission\tMileage\tVIN\tTurbo\tPrice\tStock");
         // Iterate over cars
         for (Car car : car_list.values()) {
             //shows all cars
@@ -243,7 +237,7 @@ public class RunShop {
                 System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
                         car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
                         car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-                        car.getVIN()+ "\t" +car.getPrice());
+                        car.getVIN()+ "\t"+ car.gethasTurbo() +"\t" +car.getPrice() + "\t" +car.getAvailability());
             }
             // Check if the condition and price match the criteria
             if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) { //maybe add a with in range of a couple 100s
@@ -275,14 +269,26 @@ public class RunShop {
         for (Car car : car_list.values()) {
             if (car.getID() == id){
                 //new price depending on tax and membership
-                if (curr.getBudget() >= car.getPrice()){
+                double car_price = car.getPrice();
+                if(curr.getMembership()){
+                    car_price = car_price * .9;
+                }
+                double car_price_w_tax =car_price* 1.0625;
+                if (curr.getBudget() >= car_price_w_tax){
                     if (car.getAvailability()>=1){
-                        return true;
-                    }else{
-
                         int old_a = car.getAvailability();
                         car.setAvailability(old_a-1);
                         car_list.put(id,car);
+
+                        int cars_pur = curr.getCarsPurchased();
+                        //increase the number of cars purchased by user in users_list
+                        curr.setCarsPurchased(cars_pur + 1);
+                        users_list.put(curr.getUsername(), curr);
+                        //set new budget of user
+                        curr.setBudget(curr.getBudget() - car_price_w_tax);
+                        users_list.put(curr.getUsername(), curr);
+                        return true;
+                    }else{
                         System.out.println("Car selected is not in stock");
                     }
                 }else{
@@ -316,7 +322,7 @@ public class RunShop {
 
     public static void print_Tickets(String username) {
         if (tickets.containsKey(username)) {
-            System.out.print("username ticket(s): S");
+            System.out.print(STR."\{username} ticket(s): ");
             for (int id : tickets.get(username)) {
                 Car car = car_list.get(id);
                 if(car != null){ //check if car was added/removed from car_list
@@ -332,30 +338,25 @@ public class RunShop {
         }//lol
     }
 
-    public static void adminRun(){
-        Scanner scanner = new Scanner(System.in);
-        int input = scanner.nextInt();
+    public static void car_return(User curr, int id_remove){
+        if(tickets.containsKey(curr.getUsername())){
+            int[] ids = tickets.get(curr.getUsername());
+            //int[] new_ids;
+            int index_remove = -1;
+            for (int i =0; i< ids.length; i++){
+                if(ids[i] == id_remove){
+                    index_remove = i;
+                    break;
+                }
+            }
+            //"Sedan" == (car_list.get(id)).getCarType();
+            //for( index_remove){
+            //    if (id )
+            //}
 
-        switch (input) {
-            case (1):
-                System.out.println("Add Car?");
-                break;
-            case (2):
-                System.out.println("Remove Car?");
-                //sacn input id
-                //tickets.put("Admin",[id]);
-                String uInput = scanner.nextLine();
-                //File newFile = new File(uInput + ".csv");
-                String new_file = uInput + ".csv";
-                CSV_helper.purchase_remove(new_file, car_file, tickets);
-                break;
-
-            default:
-                System.out.println("Wrong");
-                break;
+        }else{
+            System.out.println("User had no tickets");
         }
-        scanner.close();
-
     }
 
 

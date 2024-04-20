@@ -64,7 +64,8 @@ public class CSV_helper {
                 // Create a new User object using the extracted information
                 User newUser = new User(firstName, lastName, budget, carsPurchased, minerCarsMember, username, password);
 
-                System.out.println(newUser.getFirstName());
+                System.out.println(newUser.getFName());
+                System.out.println(newUser.getLName());
                 // Add user to map
                 usersMap.put(newUser.getUsername(), newUser);
             }
@@ -233,7 +234,7 @@ public class CSV_helper {
             for (User user : users_list.values()) {
                 // format for csv
                 String userData = String.format("%d,%s,%s,%.2f,%d,%b,%s,%s",
-                        id,user.getFirstName(), user.getLastName(), user.getBudget(),
+                        id,user.getFName(), user.getLName(), user.getBudget(),
                         user.getCarsPurchased(), user.getMembership(), user.getUsername(), user.getPassword());
                 id = 1+id;
                 writer.write(userData);

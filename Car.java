@@ -18,22 +18,7 @@ public class Car{
     private String VIN;
     private Boolean hasTurbo;
 
-    /**
-     * 
-     * @param carType       the type of car
-     * @param model         the car model
-     * @param ID            the car's ID
-     * @param availability  the amount of cars available
-     * @param price         the car's price
-     * @param fuelType      the type of fuel the car takes
-     * @param capacity      the amount of available seats
-     * @param transmission  the car's transmission
-     * @param mileage       the amount of miles the car currently has
-     * @param color         the car's color
-     * @param condition     the condition the car is in
-     * @param VIN           the car's VIN number
-     * @param hasTurbo      the indicator if car has a turbo
-     */
+
     public Car(){
         this.carType       = "Hatchback";
         this.model         = "Honda Fit";
@@ -83,6 +68,13 @@ public class Car{
         this.hasTurbo = hasTurbo;
     }
 
+    public void sethasTurbo(boolean hasTurbo){
+        this.hasTurbo = hasTurbo;
+    }
+
+    public boolean gethasTurbo(){
+        return this.hasTurbo;
+    }
     /**
      * Sets the car's type
      * 

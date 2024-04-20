@@ -13,9 +13,9 @@ public abstract class Person {
         this.Age = 0;
         this.gender = "NULL";
     }
-    public Person(String firstName, String lastName) {
-        this.FName = firstName;
-        this.LName = lastName;
+    public Person(String FName, String LName) {
+        this.FName = FName;
+        this.LName = LName;
     }
 
     public Person(String FName, String LName, int Age, String gender) {
