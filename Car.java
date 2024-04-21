@@ -1,3 +1,4 @@
+import java.util.Scanner;
 /**
  * This is a Car class.
  * This makes the car objects that are in the CSV file.
@@ -66,6 +67,54 @@ public class Car{
         this.condition = condition;
         this.VIN = VIN;
         this.hasTurbo = hasTurbo;
+    }
+
+    public static Car createCar() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter car type:");
+        String carType = scanner.nextLine();
+
+        System.out.println("Enter model:");
+        String model = scanner.nextLine();
+
+        System.out.println("Enter ID:");
+        int ID = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Enter availability:");
+        int availability = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Enter price:");
+        double price = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.println("Enter fuel type:");
+        String fuelType = scanner.nextLine();
+
+        System.out.println("Enter capacity:");
+        int capacity = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Enter transmission:");
+        String transmission = scanner.nextLine();
+
+
+        System.out.println("Enter color:");
+        String color = scanner.nextLine();
+
+        System.out.println("Enter condition:");
+        String condition = scanner.nextLine();
+
+        System.out.println("Enter VIN:");
+        String VIN = scanner.nextLine();
+
+        System.out.println("Enter if has turbo (true/false):");
+        boolean hasTurbo = scanner.nextBoolean();
+
+        // Create and return a new Car object with the user input
+        return new Car(carType, model, ID, availability, price, fuelType, capacity, transmission, 0, color, condition, VIN, hasTurbo);
     }
 
     public void sethasTurbo(boolean hasTurbo){
