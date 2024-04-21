@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * 
  * This class represents a user that inherits from the Person class
@@ -43,7 +45,54 @@ public class User extends Person{
         this.password        = password;
     }
 
-    //
+    /**
+     * This method creates a new User object by prompting the user to input their information.
+     *
+     * @return The newly created User object with the user's information.
+     */
+    public static User createUser() {
+        Scanner scanner = new Scanner(System.in);
+        User user = new User();
+
+        // Prompt for and set first name
+        System.out.print("Enter first name: ");
+        String firstName = scanner.nextLine();
+        user.setFName(firstName);
+
+        // Prompt for and set last name
+        System.out.print("Enter last name: ");
+        String lastName = scanner.nextLine();
+        user.setLName(lastName);
+
+        // Prompt for and set budget
+        System.out.print("Enter budget: ");
+        double budget = scanner.nextDouble();
+        user.setBudget(budget);
+
+        // Prompt for and set number of cars purchased
+        System.out.print("Enter number of cars purchased: ");
+        int carsPurchased = scanner.nextInt();
+        user.setCarsPurchased(carsPurchased);
+
+        // Prompt for and set Miner Cars membership
+        System.out.print("Are you a Miner Cars member? (y/n): ");
+        boolean member = scanner.nextLine().equalsIgnoreCase("y");
+        user.setMembership(member);
+
+        scanner.nextLine(); // Consume newline
+        // Prompt for and set username
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        user.setUsername(username);
+
+        // Prompt for and set password
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+        user.setPassword(password);
+
+        // Return the created User object
+        return user;
+    }
 
 
 

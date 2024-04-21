@@ -1,10 +1,9 @@
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
-public class RunShop {
-    static Map<String, User> users_list = new HashMap<>();
+public class RunShop implements Printable{
+    static Map<String, User> users_list = new HashMap<String ,User>();
     //path //TO BE CHANGED FOR WHEN RUNNING CODE
     //this will be used to get car info and when editing car_data
 
@@ -19,12 +18,14 @@ public class RunShop {
 
     private static HashMap<String, int[]> tickets = new HashMap<>();
 
-    public static void main(String[] args) {
+    public void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         // Make user with create user
         // User user1 = createUser(); //when enter information by hand
         users_list =CSV_helper.user_map_from_csv(user_file, (HashMap<String, User>) users_list);
+
         //Test user
+        //User.createUser();
         User user1 = new User("Seb", "Lev", 50000.00, 0, true, "Seb1", "123");
         users_list.put(user1.getUsername(), user1);
 
@@ -45,18 +46,12 @@ public class RunShop {
             User curr = users_list.get(username);
             main_log.logAction(curr, "login", logFile);
             while (true) {
-                System.out.println("\nMenu");//change this in order of options
-                System.out.println("1. Display all cars");
-                System.out.println("2. Filter cars ");
-                System.out.println("3. Purchase Car");
-                System.out.println("4. View Tickets");
-                System.out.println("5. Car Return");
-                System.out.println("6. Sign out");
+                print_menu();
                 String menu_input = scanner.nextLine();
                 switch (menu_input) {
                     case "1":
                         // Display all cars
-                        displayCars("null", 0);
+                        Logic.displayCars("null", 0,car_list);
                         break;
 
                     case "2":
@@ -64,7 +59,7 @@ public class RunShop {
 
                         System.out.println("Filter by new or used? (new/used/go back)");
                         String new_used = scanner.nextLine();
-                        if (new_used.equalsIgnoreCase("new") || new_used.equalsIgnoreCase("old")) {
+                        if (new_used.equalsIgnoreCase("new") || new_used.equalsIgnoreCase("used")) {
                             //displayCars(new_used, -1);
 
                             System.out.println("3. Filter cars by budget? (y/n)");
@@ -77,7 +72,7 @@ public class RunShop {
                                     budget = curr.getBudget();
                                     //here need to -6.25% and if member +10%
                                     System.out.println(curr.getUsername()+" current budget: "+budget);
-                                    displayCars(new_used, budget);
+                                    Logic.displayCars(new_used, budget, car_list);
                                     //break; //for testing
                                 } catch (NumberFormatException e) {
                                     System.out.println("Something wrong with budget contact admin");
@@ -85,7 +80,7 @@ public class RunShop {
                                 }
 
                             }else{
-                                displayCars(new_used, 0);
+                                Logic.displayCars(new_used, 0, car_list);
                                 //break;
                             }
                         }else if(new_used.equalsIgnoreCase("go back")) {
@@ -98,31 +93,39 @@ public class RunShop {
                     case "3":
                         //purchase car logic
                         System.out.println("3. Purchase Car (y/n)");
+                        boolean check = false;
                         String input = scanner.nextLine();
                         boolean purchase_input = input.equalsIgnoreCase("y");
                         if (purchase_input) {
-                            System.out.println("Enter the ID of the car");
-                            try {
-                                int input_ID = scanner.nextInt();
-                                boolean check = purchase_car(input_ID, curr);
-                                if (check) {
-
-                                    //make a tick for car purchase
-                                    add_Ticket(curr.getUsername(), input_ID);
-
+                            int input_ID = -1;
+                            boolean isValid_Input = false;
+                            while (!isValid_Input) {
+                                System.out.println("Enter the ID of the car");
+                                // Check if the next input is an integer
+                                if (scanner.hasNextInt()) {
+                                    input_ID = scanner.nextInt();
+                                    isValid_Input = true;
                                 } else {
-                                    System.out.println("ID does not exist");
+                                    scanner.next();
+                                    System.out.println("Did not enter a valid numerical ID");
                                 }
-                                System.out.println();
-                            }catch (InputMismatchException e) {
-                                System.out.println("Did not enter a valid numerical ID");
-                                scanner.next();
                             }
+                            if (input_ID == -1){
+                                break;
+                            }
+                            check = Logic.purchase_car(input_ID, curr, (HashMap<String, User>) users_list,car_list);
+                            if (check) {
+                                //make a tick for car purchase
+                                tickets = Logic.add_Ticket(curr.getUsername(), input_ID,tickets);
+                            } else {
+                                System.out.println("ID does not exist");
+                            }
+                            System.out.println();
                         }
                         break;
                     case "4":
                         // View Tickets
-                        print_Tickets(curr.getUsername());
+                        Logic.print_Tickets(curr.getUsername(),car_list,tickets);
                         break;
                     case "5":
                         //car return
@@ -140,8 +143,8 @@ public class RunShop {
                                 System.out.println("Invalid input. Please enter a valid integer ID.");
                             }
                         }
-
-                        car_return(curr, input_ID);
+                        Logic.car_return(curr, input_ID, (HashMap<String, User>) users_list,car_list,tickets);
+                        break;
                     case "6":
                         // Sign out
                         CSV_helper.purchase_remove(car_outputFile,car_file,tickets);
@@ -150,7 +153,7 @@ public class RunShop {
                         System.out.println("Signing out...");
                         return;
                     default:
-                        System.out.println("Invalid option. Please try again. (1,2,3,4,5)");
+                        System.out.println("(1,2,3,4,5,6)");
                 }
             }
 
@@ -158,55 +161,18 @@ public class RunShop {
 
     }
 
-
-    /**
-     * This method creates a new User object by prompting the user to input their information.
-     *
-     * @return The newly created User object with the user's information.
-     */
-    public static User createUser() {
-        Scanner scanner = new Scanner(System.in);
-        User user = new User();
-
-        // Prompt for and set first name
-        System.out.print("Enter first name: ");
-        String firstName = scanner.nextLine();
-        user.setFName(firstName);
-
-        // Prompt for and set last name
-        System.out.print("Enter last name: ");
-        String lastName = scanner.nextLine();
-        user.setLName(lastName);
-
-        // Prompt for and set budget
-        System.out.print("Enter budget: ");
-        double budget = scanner.nextDouble();
-        user.setBudget(budget);
-
-        // Prompt for and set number of cars purchased
-        System.out.print("Enter number of cars purchased: ");
-        int carsPurchased = scanner.nextInt();
-        user.setCarsPurchased(carsPurchased);
-
-        // Prompt for and set Miner Cars membership
-        System.out.print("Are you a Miner Cars member? (y/n): ");
-        boolean member = scanner.nextLine().equalsIgnoreCase("y");
-        user.setMembership(member);
-
-        scanner.nextLine(); // Consume newline
-        // Prompt for and set username
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine();
-        user.setUsername(username);
-
-        // Prompt for and set password
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
-        user.setPassword(password);
-
-        // Return the created User object
-        return user;
+    public void print_menu(){
+        System.out.println("\nMenu");//change this in order of options
+        System.out.println("1. Display all cars");
+        System.out.println("2. Filter cars ");
+        System.out.println("3. Purchase Car");
+        System.out.println("4. View Tickets");
+        System.out.println("5. Car Return");
+        System.out.println("6. Sign out");
     }
+
+
+
 
     /**
      * Attempts to log in a user with the given username and password.
@@ -229,171 +195,6 @@ public class RunShop {
             System.out.println("User not found. Contact help.");
         }
         return false;
-    }
-
-
-
-    /**
-     * Displays cars based on the given condition and budget criteria.
-     *
-     * @param condition The condition of the car to display. Pass "null" to display all cars.
-     * @param budget    The maximum budget for the car. Pass 0 to ignore budget criteria.
-     */
-    public static void displayCars(String condition, double budget) {
-        // Display header
-        System.out.println("ID\tCar Type\tModel\tCondition\tColor\tFuel Type\tCapacity\tTransmission\tMileage\tVIN\tTurbo\tPrice\tStock");
-        // Iterate over cars
-        for (Car car : car_list.values()) {
-            //shows all cars
-            if (condition.equalsIgnoreCase("null")){
-                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
-                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-                        car.getVIN()+ "\t"+ car.gethasTurbo() +"\t" +car.getPrice() + "\t" +car.getAvailability());
-            }
-            // Check if the condition and price match the criteria
-            if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) { //maybe add a with in range of a couple 100s
-                // Display car information
-                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
-                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-                        car.getVIN()+ "\t" +car.getPrice());
-            }
-
-            if (car.getCondition().equalsIgnoreCase(condition) && budget == 0){ //display cars with condition no budget
-                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
-                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-                        car.getVIN()+ "\t" +car.getPrice());
-            }
-        }
-    } //need to add avalibility to display
-
-
-    /**
-     * Checks if a car with the given ID can be purchased by the current user.
-     *
-     * @param id   The ID of the car to be purchased.
-     * @param curr The current user attempting to purchase the car.
-     * @return true if the car can be purchased, false otherwise.
-     */
-    public static boolean purchase_car(int id, User curr){
-        for (Car car : car_list.values()) {
-            if (car.getID() == id){
-                //new price depending on tax and membership
-                double car_price = car.getPrice();
-                if(curr.getMembership()){
-                    car_price = car_price * .9;//10% 1
-                }
-                double car_price_w_tax =car_price* 1.0625;
-                if (curr.getBudget() >= car_price_w_tax){
-                    if (car.getAvailability()>=1){
-                        int old_a = car.getAvailability();
-                        car.setAvailability(old_a-1);
-                        car_list.put(id,car);
-
-                        int cars_pur = curr.getCarsPurchased();
-                        //increase the number of cars purchased by user in users_list
-                        curr.setCarsPurchased(cars_pur + 1);
-                        users_list.put(curr.getUsername(), curr);
-                        //set new budget of user
-                        curr.setBudget(curr.getBudget() - car_price_w_tax);
-                        users_list.put(curr.getUsername(), curr);
-                        return true;
-                    }else{
-                        System.out.println("Car selected is not in stock");
-                    }
-                }else{
-                    System.out.println("Car selected is outside of budget");
-                }
-            }
-        }
-        return false;
-    }
-
-
-    /**
-     * Adds a ticket (ID) to the specified user's entry in the tickets map.
-     *
-     * @param username The username of the user to whom the ticket will be added.
-     * @param input_ID The ID of the ticket to be added.
-     */
-    public static void add_Ticket(String username, int input_ID) {
-        if (tickets.containsKey(username)) {
-            //  append id to array
-            int[] old_IDs = tickets.get(username);
-            int[] new_IDs = new int[old_IDs.length + 1];
-            System.arraycopy(old_IDs, 0, new_IDs, 0, old_IDs.length);
-            new_IDs[old_IDs.length] = input_ID;
-            tickets.put(username, new_IDs);
-        } else {
-            // not in Tickets so create new
-            tickets.put(username, new int[]{input_ID});
-        }
-    }
-
-    public static void print_Tickets(String username) {
-        if (tickets.containsKey(username)) {
-            System.out.print(STR."\{username} ticket(s): ");
-            for (int id : tickets.get(username)) {
-                Car car = car_list.get(id);
-                if(car != null){ //check if car was added/removed from car_list
-                    System.out.println("Car ID: "+ id);
-                    System.out.println("Car Type: " + car.getCarType() );
-                    System.out.println("Model: " + car.getModel());
-                    System.out.println("Color: " + car.getColor());
-                }
-            }
-            System.out.println("\n");
-        } else {
-            System.out.println("No tickets for user " + username);
-        }//lol
-    }
-
-    public static void car_return(User curr, int id_remove){
-        if(tickets.containsKey(curr.getUsername())){
-            int[] ids = tickets.get(curr.getUsername());
-            //int[] new_ids;
-            int index_remove = -1;
-            for (int i =0; i< ids.length; i++){
-                if(ids[i] == id_remove){
-                    index_remove = i;
-                    break;
-                }
-            }
-            //"Sedan" == (car_list.get(id)).getCarType();
-            if( index_remove == -1){
-                System.out.println("User did not purchase car with ID");
-            }else {
-                int[] new_ids = new int[ids.length-1];
-                System.arraycopy(ids, 0, new_ids, 0, index_remove);
-                for( int i=index_remove;i< ids.length;i++){
-                    new_ids[i] = ids[i];
-                }
-                //updated tickets
-                tickets.put(curr.getUsername(),new_ids);
-                Car car = car_list.get(id_remove);
-                int old_a = car.getAvailability();
-                car.setAvailability(old_a+1);
-                car_list.put(id_remove,car);
-
-                int cars_pur = curr.getCarsPurchased();
-                //increase the number of cars purchased by user in users_list
-                curr.setCarsPurchased(cars_pur - 1);
-                users_list.put(curr.getUsername(), curr);
-                //set new budget of user
-                double car_price = car.getPrice();
-                if(curr.getMembership()){
-                    car_price = car_price * .9;//10% 1
-                }
-                double car_price_w_tax =car_price* 1.0625;
-                curr.setBudget(curr.getBudget() - car_price_w_tax);
-                users_list.put(curr.getUsername(), curr);
-            }
-
-        }else{
-            System.out.println("User had no tickets");
-        }
     }
 
 

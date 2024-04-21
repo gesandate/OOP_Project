@@ -1,3 +1,4 @@
 public interface Printable {
-    void print();
+
+    void print_menu();
 }

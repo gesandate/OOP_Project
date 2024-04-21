@@ -64,8 +64,8 @@ public class CSV_helper {
                 // Create a new User object using the extracted information
                 User newUser = new User(firstName, lastName, budget, carsPurchased, minerCarsMember, username, password);
 
-                System.out.println(newUser.getFName());
-                System.out.println(newUser.getLName());
+                //System.out.println(newUser.getFName()+newUser.getLName());
+
                 // Add user to map
                 usersMap.put(newUser.getUsername(), newUser);
             }
@@ -160,6 +160,7 @@ public class CSV_helper {
 
                 // Add car to carList
                 car_list.put(id, car);
+                //System.out.println("new car added to car_list "+id +" "+car.getID());
             }
             // Close file
             bufferedReader.close();
