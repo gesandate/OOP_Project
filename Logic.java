@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Logic {
@@ -52,7 +53,7 @@ public class Logic {
         //System.out.println("***Entered car purchase***");
         for (Car car : car_list.values()) {
             if (car.getID() == id){
-                System.out.println("1");
+
                 //new price depending on tax and membership
                 double car_price = car.getPrice();
                 if(curr.getMembership()){
@@ -118,8 +119,10 @@ public class Logic {
     public static void car_return(User curr, int id_remove,HashMap<String,User> users_list, HashMap<Integer, Car> car_list ,HashMap<String,int[]> tickets){
         if(tickets.containsKey(curr.getUsername())){
             int[] ids = tickets.get(curr.getUsername());
+            System.out.println(Arrays.toString(ids));
             //int[] new_ids;
             int index_remove = -1;
+            boolean removed = false;
             for (int i =0; i< ids.length; i++){
                 if(ids[i] == id_remove){
                     index_remove = i;
@@ -130,31 +133,51 @@ public class Logic {
             if( index_remove == -1){
                 System.out.println("User did not purchase car with ID");
             }else {
-                int[] new_ids = new int[ids.length-1];
-                System.arraycopy(ids, 0, new_ids, 0, index_remove);
-                for( int i=index_remove;i< ids.length;i++){
-                    new_ids[i] = ids[i];
-                }
-                //updated tickets
-                tickets.put(curr.getUsername(),new_ids);
-                Car car = car_list.get(id_remove);
-                int old_a = car.getAvailability();
-                car.setAvailability(old_a+1);
-                car_list.put(id_remove,car);
+                System.out.println("Ids len "+ ids.length);
+                System.out.println("Index to remove "+ index_remove);
 
-                int cars_pur = curr.getCarsPurchased();
-                //increase the number of cars purchased by user in users_list
-                curr.setCarsPurchased(cars_pur - 1);
-                users_list.put(curr.getUsername(), curr);
-                //set new budget of user
-                double car_price = car.getPrice();
-                if(curr.getMembership()){
-                    car_price = car_price * .9;//10% 1
+                if (ids.length==1) {
+                    removed = true;
                 }
-                double car_price_w_tax =car_price* 1.0625;
-                curr.setBudget(curr.getBudget() - car_price_w_tax);
-                users_list.put(curr.getUsername(), curr);
+                int[] new_ids;
+                //System.out.println("New ids len "+ new_ids.length);
+                //System.arraycopy(ids, 0, new_ids, 0, index_remove);
+                if(!removed){
+                    new_ids = new int[ids.length - 1];
+                    int index_new = 0;
+                    for( int i=0;i< ids.length;i++){
+                        if(i != index_remove) {
+                            new_ids[index_new] = ids[i];
+                            index_new++;
+                        }
+                    }
+                    System.out.println("New array "+ Arrays.toString(new_ids));
+                    //updated tickets
+                    tickets.put(curr.getUsername(), new_ids);
+                }else{
+                    tickets.remove(curr.getUsername());
+
+                }
             }
+            Car car = car_list.get(id_remove);
+            int old_a = car.getAvailability();
+            car.setAvailability(old_a+1);
+            car_list.put(id_remove,car);
+
+            int cars_pur = curr.getCarsPurchased();
+            //increase the number of cars purchased by user in users_list
+            curr.setCarsPurchased(cars_pur - 1);
+            users_list.put(curr.getUsername(), curr);
+            System.out.println("Before return budget: "+ curr.getBudget());
+            //set new budget of user
+            double car_price = car.getPrice();
+            if(curr.getMembership()){
+                car_price = car_price * .9;//10% 1
+            }
+            double car_price_w_tax =car_price* 1.0625;
+            curr.setBudget(curr.getBudget() + car_price_w_tax);
+            users_list.put(curr.getUsername(), curr);
+            System.out.println(curr.getBudget()+" "+curr.getCarsPurchased());
         }else{
             System.out.println("User had no tickets");
         }
