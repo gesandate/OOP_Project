@@ -7,16 +7,25 @@ public class RunShop implements Printable{
     //path //TO BE CHANGED FOR WHEN RUNNING CODE
     //this will be used to get car info and when editing car_data
 
+    private static final String car_file = "C:/Users/gibbs/Downloads/car_data(1).csv";
+    private static String car_outputFile = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newCarFile.csv";
+    private static final String user_file = "C:/Users/gibbs/Downloads/user_data.csv";
+    private static String new_user_data = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newUserFile.csv";
 
-    private static HashMap<Integer, Car> car_list = new HashMap<>();
-    private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
-    private static String car_outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
-    private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/user_data.csv";
-    private static String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
+
+    static HashMap<Integer, Car> car_list = new HashMap<>();
+
+    //static HashMap<Integer, Double> revenue_list = new HashMap<>();
+    // private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
+    // private static String car_outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
+    // private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/user_data.csv";
+    // private static String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
     //This will be the log file of all users actions
     private static final String logFile = "log.txt";
 
     private static HashMap<String, int[]> tickets = new HashMap<>();
+
+    static HashMap<Integer, Double> revenue_list = new HashMap<>();
 
     public void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -113,7 +122,7 @@ public class RunShop implements Printable{
                             if (input_ID == -1){
                                 break;
                             }
-                            check = Logic.purchase_car(input_ID, curr, (HashMap<String, User>) users_list,car_list);
+                            check = Logic.purchase_car(input_ID, curr, (HashMap<String, User>) users_list,car_list, revenue_list);
                             if (check) {
                                 //make a tick for car purchase
                                 tickets = Logic.add_Ticket(curr.getUsername(), input_ID,tickets);
