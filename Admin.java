@@ -26,9 +26,9 @@ public class Admin extends Person{
  * 
  * @param action the admin action that is done.
  */
-public void adminActon(String action){
+// public void adminActon(String action){
 
-    log.logAction(this, action);
+//     log.logAction(this, action);
 
-}
+// }
 }
