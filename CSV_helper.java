@@ -247,4 +247,15 @@ public class CSV_helper {
         }
     }
 
+    // public static void removeCar(int ID){
+    //     String file = "car_data(1).csv";
+    //         BufferedReader reader = new BufferedReader(new FileReader(file));
+
+    //     try {
+            
+    //     } catch (Exception e) {
+    //         System.out.println("Error reading file");
+    //     }
+    // }
+
 }

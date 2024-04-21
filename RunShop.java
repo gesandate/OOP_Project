@@ -236,6 +236,7 @@ public class RunShop implements Printable{
                 case (2):
                     System.out.println("What the ID of the car you would like to remove?");
                     input = scanner.nextInt();
+                    car_list.remove(input);
                     reset = false;
                     break;
                 case (3):
