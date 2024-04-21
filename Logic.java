@@ -49,7 +49,7 @@ public class Logic {
      * @param curr The current user attempting to purchase the car.
      * @return true if the car can be purchased, false otherwise.
      */
-    public static boolean purchase_car(int id, User curr, HashMap<String,User> users_list, HashMap<Integer, Car> car_list){
+    public static boolean purchase_car(int id, User curr, HashMap<String,User> users_list, HashMap<Integer, Car> car_list, HashMap<Integer, Double> revenue_list){
         //System.out.println("***Entered car purchase***");
         for (Car car : car_list.values()) {
             if (car.getID() == id){
@@ -74,6 +74,13 @@ public class Logic {
                         users_list.put(curr.getUsername(), curr);
                         //set new budget of user
                         curr.setBudget(curr.getBudget() - car_price_w_tax);
+                        double rev = car_price_w_tax;
+                        if (revenue_list.containsKey(id)) {
+                            rev = car_price_w_tax + revenue_list.get(id);
+                            revenue_list.put(id, rev);
+                        }else{
+                            revenue_list.put(id, rev);
+                        }
                         users_list.put(curr.getUsername(), curr);
                         System.out.println("Car "+car.getID()+ " purchased.");
                         return true;
@@ -87,6 +94,8 @@ public class Logic {
         }
         return false;
     }
+
+    
 
 
     /**
