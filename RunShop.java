@@ -180,7 +180,7 @@ public class RunShop implements Printable{
 
             }
         }
-
+        scanner.close();
     }
 
     public void print_menu(){
@@ -243,6 +243,15 @@ public class RunShop implements Printable{
                     System.out.println("Whats the ID of the Car?");
                     input = scanner.nextInt();
                     System.out.println(revenue_list.get(input));
+                    //write to the file
+                    //take id
+                    //new method in csv helper
+                    File newFile = CSV_helper.removeCar(input, car_file);
+                    //copy logic for reading and writing
+                    //look what he sdoes to find id
+                    //thats in purchase sremove id index
+                    //find it -> instead of wrinting get line, not use it and go to the next line on both
+                    //look for it its on purchase remove
                     reset = false;
                     break;
                 default:

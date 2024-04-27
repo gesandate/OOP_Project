@@ -126,6 +126,7 @@ public class Logic {
      * @param id_remove  The ID of the car that is being returned.
      */
     public static void car_return(User curr, int id_remove,HashMap<String,User> users_list, HashMap<Integer, Car> car_list ,HashMap<String,int[]> tickets){
+        //DecimalFormat decimalFormat = new DecimalFormat("0.00");
         if(tickets.containsKey(curr.getUsername())){
             int[] ids = tickets.get(curr.getUsername());
             System.out.println(Arrays.toString(ids));

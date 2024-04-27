@@ -247,15 +247,29 @@ public class CSV_helper {
         }
     }
 
-    // public static void removeCar(int ID){
-    //     String file = "car_data(1).csv";
-    //         BufferedReader reader = new BufferedReader(new FileReader(file));
-
-    //     try {
+    public static File removeCar(int ID, String file) {
+        File newFile = new File("newCarFile.csv");
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
             
-    //     } catch (Exception e) {
-    //         System.out.println("Error reading file");
-    //     }
-    // }
+            String line = reader.readLine();
+            writer.write(line);
+            int count = 0;
+            while (line != null) {
+                if (count == ID){
+                    reader.readLine();
+                }
+                line = reader.readLine();
+                writer.write(line);
+                count++;
+            }
+            reader.close();
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file\n" + e);
+        }
+        return newFile;
+    }
 
 }
