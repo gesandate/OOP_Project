@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 /**
- * 
  * This class represents a user that inherits from the Person class
  */
 public class User extends Person{
@@ -15,6 +14,9 @@ public class User extends Person{
     private String  password;
 
 
+    /**
+     * Instantiates a new User.
+     */
     public User(){
         super("NULL", "NULL", 0, "NULL");
         this.budget          = 0.0;
@@ -25,14 +27,15 @@ public class User extends Person{
     }
 
     /**
-     * 
-     * @param FName         the user's first name
-     * @param LName          the user's last name
-     * @param budget            the user's budget
-     * @param carsPurchased     the amount of cars the user previously purchased
-     * @param minerCarsMember   the membership status of the user
-     * @param username          the user's username
-     * @param password          the user's password
+     * Instantiates a new User.
+     *
+     * @param FName           the user's first name
+     * @param LName           the user's last name
+     * @param budget          the user's budget
+     * @param carsPurchased   the amount of cars the user previously purchased
+     * @param minerCarsMember the membership status of the user
+     * @param username        the user's username
+     * @param password        the user's password
      */
     public User(String FName, String LName, Double budget, Integer carsPurchased, Boolean minerCarsMember, String username, String password){
         super(FName, LName);
@@ -123,7 +126,7 @@ public class User extends Person{
 
     /**
      * Sets the budget for the user
-     * 
+     *
      * @param budget the new budget to be set for the user.
      */
     public void setBudget(Double budget){
@@ -132,7 +135,7 @@ public class User extends Person{
 
     /**
      * Gets the user's budget
-     * 
+     *
      * @return the user's budget as a Double
      */
     public Double getBudget(){
@@ -141,7 +144,7 @@ public class User extends Person{
 
     /**
      * Sets the amount of cars previously purchased by the user
-     * 
+     *
      * @param carsPurchased the amount of cars the user previously purchased.
      */
     public void setCarsPurchased(int carsPurchased){
@@ -150,7 +153,7 @@ public class User extends Person{
 
     /**
      * Gets the amount of cars previously purchased
-     * 
+     *
      * @return the amount of cars the user previously purchased as an int
      */
     public int getCarsPurchased(){
@@ -159,7 +162,7 @@ public class User extends Person{
 
     /**
      * Sets the membership status for the user
-     * 
+     *
      * @param member the membership status
      */
     public void setMembership(boolean member){
@@ -168,7 +171,7 @@ public class User extends Person{
 
     /**
      * Gets the user's membership status
-     * 
+     *
      * @return the user's membership status as a boolean
      */
     public boolean getMembership(){
@@ -177,7 +180,7 @@ public class User extends Person{
 
     /**
      * Sets the user's username
-     * 
+     *
      * @param user the user's username
      */
     public void setUsername(String user){
@@ -186,7 +189,7 @@ public class User extends Person{
 
     /**
      * Gets the user's username
-     * 
+     *
      * @return the user's username as a String
      */
     public String getUsername(){
@@ -195,7 +198,7 @@ public class User extends Person{
 
     /**
      * Sets the user's password
-     * 
+     *
      * @param password the user's password
      */
     public void setPassword(String password){
@@ -204,7 +207,7 @@ public class User extends Person{
 
     /**
      * Gets the user's password
-     * 
+     *
      * @return the user's password as a String
      */
     public String getPassword(){

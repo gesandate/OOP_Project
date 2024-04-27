@@ -1,6 +1,10 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.lang.Math;
 
+/**
+ * The Logic for so methods.
+ */
 public class Logic {
 
 
@@ -9,6 +13,7 @@ public class Logic {
      *
      * @param condition The condition of the car to display. Pass "null" to display all cars.
      * @param budget    The maximum budget for the car. Pass 0 to ignore budget criteria.
+     * @param car_list  the car list
      */
     public static void displayCars(String condition, double budget, HashMap<Integer, Car> car_list) {
         // Display header
@@ -17,36 +22,40 @@ public class Logic {
         for (Car car : car_list.values()) {
             //shows all cars
             if (condition.equalsIgnoreCase("null")){
-                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
-                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-                        car.getVIN()+ "\t"+ car.gethasTurbo() +"\t" +car.getPrice() + "\t" +car.getAvailability());
+                car.print_menu();
+//                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
+//                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
+//                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
+//                        car.getVIN()+ "\t"+ car.gethasTurbo() +"\t" +car.getPrice() + "\t" +car.getAvailability());
             }
             // Check if the condition and price match the criteria
             if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) { //maybe add a with in range of a couple 100s
                 // Display car information
-                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
-                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-                        car.getVIN()+ "\t" +car.getPrice());
+                car.print_menu();
+//                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
+//                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
+//                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
+//                        car.getVIN()+ "\t" +car.getPrice()+ "\t" +car.getAvailability());
             }
 
             if (car.getCondition().equalsIgnoreCase(condition) && budget == 0){ //display cars with condition no budget
                 System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
                         car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
                         car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-                        car.getVIN()+ "\t" +car.getPrice());
+                        car.getVIN()+ "\t" +car.getPrice()+ "\t" +car.getAvailability());
             }
         }
-    } //need to add avalibility to display
-
+    }
 
 
     /**
      * Checks if a car with the given ID can be purchased by the current user.
      *
-     * @param id   The ID of the car to be purchased.
-     * @param curr The current user attempting to purchase the car.
+     * @param id           The ID of the car to be purchased.
+     * @param curr         The current user attempting to purchase the car.
+     * @param users_list   the users list
+     * @param car_list     the car list
+     * @param revenue_list the revenue list
      * @return true if the car can be purchased, false otherwise.
      */
     public static boolean purchase_car(int id, User curr, HashMap<String,User> users_list, HashMap<Integer, Car> car_list, HashMap<Integer, Double> revenue_list){
@@ -95,14 +104,14 @@ public class Logic {
         return false;
     }
 
-    
-
 
     /**
      * Adds a ticket (ID) to the specified user's entry in the tickets map.
      *
      * @param username The username of the user to whom the ticket will be added.
      * @param input_ID The ID of the ticket to be added.
+     * @param tickets  the tickets
+     * @return the hash map
      */
     public static HashMap<String, int[]> add_Ticket(String username, int input_ID, HashMap<String,int[]> tickets) {
         if (tickets.containsKey(username)) {
@@ -124,6 +133,9 @@ public class Logic {
      *
      * @param curr       The current user returning the car.
      * @param id_remove  The ID of the car that is being returned.
+     * @param users_list the users list
+     * @param car_list   A HashMap containing car objects, with car IDs as keys.
+     * @param tickets    A HashMap containing ticket information, with usernames as keys and arrays of ticket IDs as values.
      */
     public static void car_return(User curr, int id_remove,HashMap<String,User> users_list, HashMap<Integer, Car> car_list ,HashMap<String,int[]> tickets){
         //DecimalFormat decimalFormat = new DecimalFormat("0.00");
@@ -143,8 +155,8 @@ public class Logic {
             if( index_remove == -1){
                 System.out.println("User did not purchase car with ID");
             }else {
-                System.out.println("Ids len "+ ids.length);
-                System.out.println("Index to remove "+ index_remove);
+                //System.out.println("Ids len "+ ids.length);
+                //System.out.println("Index to remove "+ index_remove);
 
                 if (ids.length==1) {
                     removed = true;
@@ -161,7 +173,7 @@ public class Logic {
                             index_new++;
                         }
                     }
-                    System.out.println("New array "+ Arrays.toString(new_ids));
+                    //System.out.println("New array "+ Arrays.toString(new_ids));
                     //updated tickets
                     tickets.put(curr.getUsername(), new_ids);
                 }else{
@@ -185,13 +197,15 @@ public class Logic {
                 car_price = car_price * .9;//10% 1
             }
             double car_price_w_tax =car_price* 1.0625;
-            curr.setBudget(curr.getBudget() + car_price_w_tax);
+            curr.setBudget((double) Math.round(curr.getBudget() + car_price_w_tax));
             users_list.put(curr.getUsername(), curr);
-            System.out.println(curr.getBudget()+" "+curr.getCarsPurchased());
+            System.out.println(Math.round(curr.getBudget())+" "+curr.getCarsPurchased());
         }else{
             System.out.println("User had no tickets");
         }
     }
+
+
 
     /**
      * Prints the tickets associated with the specified user.

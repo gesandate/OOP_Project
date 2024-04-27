@@ -13,11 +13,15 @@ public class Log {
     private String action;
     private String timeStamp;
 
+    /**
+     * Instantiates a new Log.
+     */
     public Log(){
         this.name_of_user = null;
         this.action = null;
         this.timeStamp = null;
     }
+
     /**
      * Constructor for the log class
      * 

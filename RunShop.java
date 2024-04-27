@@ -1,32 +1,49 @@
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * The type Run shop.
+ */
 public class RunShop implements Printable{
+    /**
+     * The Users list.
+     */
     static Map<String, User> users_list = new HashMap<String ,User>();
     //path //TO BE CHANGED FOR WHEN RUNNING CODE
     //this will be used to get car info and when editing car_data
 
-    private static final String car_file = "C:/Users/gibbs/Downloads/car_data(1).csv";
-    private static String car_outputFile = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newCarFile.csv";
-    private static final String user_file = "C:/Users/gibbs/Downloads/user_data.csv";
-    private static String new_user_data = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newUserFile.csv";
+//    private static final String car_file = "C:/Users/gibbs/Downloads/car_data(1).csv";
+//    private static String car_outputFile = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newCarFile.csv";
+//    private static final String user_file = "C:/Users/gibbs/Downloads/user_data.csv";
+//    private static String new_user_data = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newUserFile.csv";
 
 
+    /**
+     * The Car list.
+     */
     static HashMap<Integer, Car> car_list = new HashMap<>();
 
-    //static HashMap<Integer, Double> revenue_list = new HashMap<>();
-    // private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
-    // private static String car_outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
-    // private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/user_data.csv";
-    // private static String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
+    /**
+     * The Revenue list.
+     */
+    static HashMap<Integer, Double> revenue_list = new HashMap<>();
+     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
+     private static String car_outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
+     private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/user_data.csv";
+     private static String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
     //This will be the log file of all users actions
     private static final String logFile = "log.txt";
 
     private static HashMap<String, int[]> tickets = new HashMap<>();
 
-    static HashMap<Integer, Double> revenue_list = new HashMap<>();
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
     public void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         // Make user with create user
@@ -61,6 +78,7 @@ public class RunShop implements Printable{
                         case "1":
                             // Display all cars
                             Logic.displayCars("null", 0,car_list);
+                            main_log.logAction(curr, "Displayed all cars", logFile);
                             break;
 
                         case "2":
@@ -82,6 +100,7 @@ public class RunShop implements Printable{
                                         //here need to -6.25% and if member +10%
                                         System.out.println(curr.getUsername()+" current budget: "+budget);
                                         Logic.displayCars(new_used, budget, car_list);
+                                        main_log.logAction(curr, "Displayed cars filtered by condition and by budget", logFile);
                                         //break; //for testing
                                     } catch (NumberFormatException e) {
                                         System.out.println("Something wrong with budget contact admin");
@@ -90,6 +109,7 @@ public class RunShop implements Printable{
 
                                 }else{
                                     Logic.displayCars(new_used, 0, car_list);
+                                    main_log.logAction(curr, "Displayed cars filtered by condition", logFile);
                                     //break;
                                 }
                             }else if(new_used.equalsIgnoreCase("go back")) {
@@ -126,6 +146,7 @@ public class RunShop implements Printable{
                                 if (check) {
                                     //make a tick for car purchase
                                     tickets = Logic.add_Ticket(curr.getUsername(), input_ID,tickets);
+                                    main_log.logAction(curr, "Car purchased", logFile);
                                 } else {
                                     System.out.println("ID does not exist");
                                 }
@@ -135,6 +156,7 @@ public class RunShop implements Printable{
                         case "4":
                             // View Tickets
                             Logic.print_Tickets(curr.getUsername(),car_list,tickets);
+                            main_log.logAction(curr, "Displayed tickets", logFile);
                             break;
                         case "5":
                             //car return
@@ -153,12 +175,14 @@ public class RunShop implements Printable{
                                 }
                             }
                             Logic.car_return(curr, input_ID, (HashMap<String, User>) users_list,car_list,tickets);
+                            main_log.logAction(curr, "Returned car", logFile);
                             break;
                         case "6":
                             // Sign out
                             CSV_helper.purchase_remove(car_outputFile,car_file,tickets);
                             CSV_helper.create_new_user_data(new_user_data, (HashMap<String, User>) users_list);
                             scanner.close(); // Close the scanner when done
+                            main_log.logAction(curr, "Signed out", logFile);
                             System.out.println("Signing out...");
                             return;
                         default:
@@ -183,6 +207,7 @@ public class RunShop implements Printable{
         scanner.close();
     }
 
+    @Override
     public void print_menu(){
         System.out.println("\nMenu");//change this in order of options
         System.out.println("1. Display all cars");
@@ -192,7 +217,6 @@ public class RunShop implements Printable{
         System.out.println("5. Car Return");
         System.out.println("6. Sign out");
     }
- 
 
 
     /**
@@ -218,14 +242,18 @@ public class RunShop implements Printable{
         return false;
     }
 
+    /**
+     * Admin login.
+     */
     public static void adminLogin(){
-        Scanner scanner = new Scanner(System.in);
-        int input = scanner.nextInt();
-
         System.err.println("Welcome back ADMIN! What would you like to do?");
         System.err.println("1. Add Car to CSV file.");
         System.err.println("2. Remove Car from CSV.");
         System.err.println("3. Check a Car's revenue.");
+        Scanner scanner = new Scanner(System.in);
+        int input = scanner.nextInt();
+
+
         boolean reset = true;
         while(reset){
             switch (input) {

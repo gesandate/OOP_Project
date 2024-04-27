@@ -1,9 +1,10 @@
 import java.util.Scanner;
+
 /**
  * This is a Car class.
  * This makes the car objects that are in the CSV file.
  */
-public class Car{
+public class Car implements Printable{
 
     private String carType;
     private String model;
@@ -20,6 +21,9 @@ public class Car{
     private Boolean hasTurbo;
 
 
+    /**
+     * Instantiates a new Car.
+     */
     public Car(){
         this.carType       = "Hatchback";
         this.model         = "Honda Fit";
@@ -37,20 +41,21 @@ public class Car{
     }
 
     /**
-     * 
-     * @param carType       the type of car
-     * @param model         the car model
-     * @param ID            the car's ID
-     * @param availability  the amount of cars available
-     * @param price         the car's price
-     * @param fuelType      the type of fuel the car takes
-     * @param capacity      the amount of available seats
-     * @param transmission  the car's transmission
-     * @param mileage       the amount of miles the car currently has
-     * @param color         the car's color
-     * @param condition     the condition the car is in
-     * @param VIN           the car's VIN number
-     * @param hasTurbo      the indicator if car has a turbo
+     * Instantiates a new Car.
+     *
+     * @param carType      the type of car
+     * @param model        the car model
+     * @param ID           the car's ID
+     * @param availability the amount of cars available
+     * @param price        the car's price
+     * @param fuelType     the type of fuel the car takes
+     * @param capacity     the amount of available seats
+     * @param transmission the car's transmission
+     * @param mileage      the amount of miles the car currently has
+     * @param color        the car's color
+     * @param condition    the condition the car is in
+     * @param VIN          the car's VIN number
+     * @param hasTurbo     the indicator if car has a turbo
      */
     public Car(String carType, String model, int ID, int availability, double price, String fuelType, int capacity,
                String transmission, int mileage, String color, String condition, String VIN, Boolean hasTurbo) {
@@ -69,6 +74,11 @@ public class Car{
         this.hasTurbo = hasTurbo;
     }
 
+    /**
+     * Create car car.
+     *
+     * @return the car
+     */
     public static Car createCar() {
         Scanner scanner = new Scanner(System.in);
 
@@ -117,16 +127,35 @@ public class Car{
         return new Car(carType, model, ID, availability, price, fuelType, capacity, transmission, 0, color, condition, VIN, hasTurbo);
     }
 
+    public void print_menu(){
+        System.out.println(getID() + "\t" +getCarType() + "\t" + getModel() + "\t" +
+                getCondition() + "\t" + getColor() + "\t" + getFuelType() + "\t" +
+                getCapacity()+ "\t" +getTransmission()+ "\t" +getMileage()+ "\t" +
+                getVIN()+ "\t" +getPrice()+ "\t" +getAvailability());
+    }
+
+
+    /**
+     * Sethas turbo.
+     *
+     * @param hasTurbo the has turbo
+     */
     public void sethasTurbo(boolean hasTurbo){
         this.hasTurbo = hasTurbo;
     }
 
+    /**
+     * Gethas turbo boolean.
+     *
+     * @return the boolean
+     */
     public boolean gethasTurbo(){
         return this.hasTurbo;
     }
+
     /**
      * Sets the car's type
-     * 
+     *
      * @param carType the car's type
      */
     public void setCarType(String carType){
@@ -135,7 +164,7 @@ public class Car{
 
     /**
      * Sets the car's model
-     * 
+     *
      * @param model teh car's model
      */
     public void setModel(String model){
@@ -144,7 +173,7 @@ public class Car{
 
     /**
      * Sets the car's ID
-     * 
+     *
      * @param id the car's ID
      */
     public void setID(int id){
@@ -153,7 +182,7 @@ public class Car{
 
     /**
      * Sets the cars availability
-     * 
+     *
      * @param amnt the amount of cars available
      */
     public void setAvailability(int amnt){
@@ -162,7 +191,7 @@ public class Car{
 
     /**
      * Sets the car's price
-     * 
+     *
      * @param price the car's price
      */
     public void setPrice(double price){
@@ -171,7 +200,7 @@ public class Car{
 
     /**
      * Sets the car's fuel type
-     * 
+     *
      * @param fuelType the car's fuel type
      */
     public void setFuelType(String fuelType){
@@ -180,7 +209,7 @@ public class Car{
 
     /**
      * Sets the car's capacity
-     * 
+     *
      * @param capacity the number of seats in the car
      */
     public void setCapacity(int capacity){
@@ -189,7 +218,7 @@ public class Car{
 
     /**
      * Sets the car's transmission
-     * 
+     *
      * @param transmission the car's transmission
      */
     public void setTransmission(String transmission){
@@ -198,16 +227,16 @@ public class Car{
 
     /**
      * Sets the car's mileage
-     * 
+     *
      * @param miles the cars mileage
-     */ 
+     */
     public void setMileage(int miles){
         this.mileage = miles;
     }
 
     /**
      * Sets the car's color
-     * 
+     *
      * @param color the car's color
      */
     public void setColor(String color){
@@ -216,7 +245,7 @@ public class Car{
 
     /**
      * Sets the car's condition
-     * 
+     *
      * @param condition the car's condition
      */
     public void setCondition(String condition){
@@ -225,7 +254,7 @@ public class Car{
 
     /**
      * Sets the car's VIN
-     * 
+     *
      * @param VIN the car's VIN
      */
     public void setVIN(String VIN){
@@ -234,7 +263,7 @@ public class Car{
 
     /**
      * Gets the car's type
-     * 
+     *
      * @return the car's type as a String
      */
     public String getCarType(){
@@ -243,7 +272,7 @@ public class Car{
 
     /**
      * Gets the car's model
-     * 
+     *
      * @return the car's model as a String
      */
     public String getModel(){
@@ -252,7 +281,7 @@ public class Car{
 
     /**
      * Gets the car's ID
-     * 
+     *
      * @return the car's ID as an int
      */
     public int getID(){
@@ -261,7 +290,7 @@ public class Car{
 
     /**
      * Gets the car's availability
-     * 
+     *
      * @return the car's availability as an int
      */
     public int getAvailability(){
@@ -270,7 +299,7 @@ public class Car{
 
     /**
      * Gets the car's price
-     * 
+     *
      * @return the car's price as a double
      */
     public double getPrice(){
@@ -279,7 +308,7 @@ public class Car{
 
     /**
      * Gets the car's fuel type
-     * 
+     *
      * @return the car's fuel type as a String
      */
     public String getFuelType(){
@@ -288,7 +317,7 @@ public class Car{
 
     /**
      * Gets the car's capacity
-     * 
+     *
      * @return the car's capacity as an int
      */
     public int getCapacity(){
@@ -297,7 +326,7 @@ public class Car{
 
     /**
      * Gets the car's transmission
-     * 
+     *
      * @return the car's transmission as an int
      */
     public String getTransmission(){
@@ -306,7 +335,7 @@ public class Car{
 
     /**
      * Gets the car's mileage
-     * 
+     *
      * @return the cars mileage as an int
      */
     public int getMileage(){
@@ -315,7 +344,7 @@ public class Car{
 
     /**
      * Gets the car's color
-     * 
+     *
      * @return the car's color as a String
      */
     public String getColor(){
@@ -324,7 +353,7 @@ public class Car{
 
     /**
      * Gets the car's condition
-     * 
+     *
      * @return the car's condition as a String
      */
     public String getCondition(){
@@ -333,7 +362,7 @@ public class Car{
 
     /**
      * Gets hte car's VIN
-     * 
+     *
      * @return the car's VIN as a String
      */
     public String getVIN(){
