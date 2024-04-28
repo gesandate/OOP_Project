@@ -4,8 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Csv helper.
+ */
 public class CSV_helper {
 
+    /**
+     * User map from csv hash map.
+     *
+     * @param csv_File_Name the csv file name
+     * @param usersMap      the users map
+     * @return the hash map
+     */
     public static HashMap<String, User> user_map_from_csv(String csv_File_Name, HashMap<String, User> usersMap) {
         try {
             // Create a FileReader object to read the CSV file
@@ -77,6 +87,13 @@ public class CSV_helper {
         return usersMap;
     }
 
+    /**
+     * Cars map from csv hash map.
+     *
+     * @param car_file the car file
+     * @param car_list the car list
+     * @return the hash map
+     */
     public static HashMap<Integer, Car> cars_map_from_csv(String car_file, HashMap<Integer,Car> car_list){
         try{
             // Create BufferedReader object
@@ -170,7 +187,13 @@ public class CSV_helper {
         return car_list;
     }
 
-    //public static void
+    /**
+     * Purchase remove.
+     *
+     * @param car_csv_out the car csv out
+     * @param car_file    the car file
+     * @param tickets     the tickets
+     */
     public static void purchase_remove(String car_csv_out,String car_file, HashMap<String, int[]> tickets){
         //**CHANGE WHERE OUTPUT FILE IS MADE**//
         try (BufferedReader reader = new BufferedReader(new FileReader(car_file));
@@ -223,6 +246,12 @@ public class CSV_helper {
         }
     }
 
+    /**
+     * Create new user data.
+     *
+     * @param user_newCSV the user new csv
+     * @param users_list  the users list
+     */
     public static void create_new_user_data(String user_newCSV, HashMap<String, User> users_list) {
         //**this should be changed for use
 
@@ -255,14 +284,19 @@ public class CSV_helper {
             
             String line = reader.readLine();
             writer.write(line);
-            int count = 0;
-            while (line != null) {
+            writer.newLine(); //new line
+            int count = 1;  //start at 1
+            while ((line = reader.readLine()) != null) { //read.line shouldn't be null
                 if (count == ID){
-                    reader.readLine();
+                    //
+                    writer.newLine(); //write an empty line
+                    count++;
+                }else {
+                    //line = reader.readLine();
+                    writer.write(line);
+                    writer.newLine();
+                    count++;
                 }
-                line = reader.readLine();
-                writer.write(line);
-                count++;
             }
             reader.close();
             writer.close();
