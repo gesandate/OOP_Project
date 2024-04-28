@@ -237,21 +237,13 @@ public class RunShop implements Printable{
                     System.out.println("What the ID of the car you would like to remove?");
                     input = scanner.nextInt();
                     car_list.remove(input);
+                    File newFile = CSV_helper.removeCar(input, car_file);
                     reset = false;
                     break;
                 case (3):
                     System.out.println("Whats the ID of the Car?");
                     input = scanner.nextInt();
                     System.out.println(revenue_list.get(input));
-                    //write to the file
-                    //take id
-                    //new method in csv helper
-                    File newFile = CSV_helper.removeCar(input, car_file);
-                    //copy logic for reading and writing
-                    //look what he sdoes to find id
-                    //thats in purchase sremove id index
-                    //find it -> instead of wrinting get line, not use it and go to the next line on both
-                    //look for it its on purchase remove
                     reset = false;
                     break;
                 default:
@@ -270,7 +262,7 @@ public class RunShop implements Printable{
 
 
 
-
+//O O
 //-_-
 
 
