@@ -41,6 +41,7 @@ public class Log {
      * @param user      the user performing the action
      * @param action    the action the user is performing 
      * @param filename  the file where the action is logged onto
+     *  -_-
      */
     public void logAction(User user, String action, String filename) {
         String timestamp = new SimpleDateFormat("HH:mm:ss MM/dd/yy").format(new Date());
