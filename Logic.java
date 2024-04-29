@@ -7,6 +7,32 @@ import java.lang.Math;
  */
 public class Logic {
 
+    private static final double tax = 1.0625;
+    private  static final double discount = .9;
+
+
+    /**
+     * Attempts to log in a user with the given username and password.
+     *
+     * @param username The username of the user attempting to log in.
+     * @param password The password of the user attempting to log in.
+     * @return true if the login attempt is successful, false otherwise.
+     */
+    public static boolean login(String username, String password, HashMap<String,User> users_list) {
+        // Check if the entered username exist and if the password matches
+        if (users_list.containsKey(username)) {
+            User currentUser = users_list.get(username);
+            if (currentUser.getPassword().equals(password)) {
+                System.out.println("Welcome "+username);
+                return true;
+            } else {
+                System.out.println("Invalid password. Try again.");
+            }
+        } else {
+            System.out.println("User not found. Contact help.");
+        }
+        return false;
+    }
 
     /**
      * Displays cars based on the given condition and budget criteria.
@@ -23,26 +49,15 @@ public class Logic {
             //shows all cars
             if (condition.equalsIgnoreCase("null")){
                 car.print_menu();
-//                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-//                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
-//                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-//                        car.getVIN()+ "\t"+ car.gethasTurbo() +"\t" +car.getPrice() + "\t" +car.getAvailability());
             }
             // Check if the condition and price match the criteria
             if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) { //maybe add a with in range of a couple 100s
                 // Display car information
                 car.print_menu();
-//                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-//                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
-//                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-//                        car.getVIN()+ "\t" +car.getPrice()+ "\t" +car.getAvailability());
             }
 
             if (car.getCondition().equalsIgnoreCase(condition) && budget == 0){ //display cars with condition no budget
-                System.out.println(car.getID() + "\t" + car.getCarType() + "\t" + car.getModel() + "\t" +
-                        car.getCondition() + "\t" + car.getColor() + "\t" + car.getFuelType() + "\t" +
-                        car.getCapacity()+ "\t" +car.getTransmission()+ "\t" +car.getMileage()+ "\t" +
-                        car.getVIN()+ "\t" +car.getPrice()+ "\t" +car.getAvailability());
+                car.print_menu();
             }
         }
     }
@@ -194,9 +209,9 @@ public class Logic {
             //set new budget of user
             double car_price = car.getPrice();
             if(curr.getMembership()){
-                car_price = car_price * .9;//10% 1
+                car_price = car_price * discount;//10%
             }
-            double car_price_w_tax =car_price* 1.0625;
+            double car_price_w_tax =car_price* tax;
             curr.setBudget((double) Math.round(curr.getBudget() + car_price_w_tax));
             users_list.put(curr.getUsername(), curr);
             System.out.println(Math.round(curr.getBudget())+" "+curr.getCarsPurchased());

@@ -127,6 +127,8 @@ public class Car implements Printable{
         return new Car(carType, model, ID, availability, price, fuelType, capacity, transmission, 0, color, condition, VIN, hasTurbo);
     }
 
+
+    //move display car??
     public void print_menu(){
         System.out.println(getID() + "\t" +getCarType() + "\t" + getModel() + "\t" +
                 getCondition() + "\t" + getColor() + "\t" + getFuelType() + "\t" +

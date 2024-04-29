@@ -4,7 +4,7 @@
  */
 public class Admin extends Person{
 
-    private Log log;
+
 
     /**
      * 
@@ -16,19 +16,7 @@ public class Admin extends Person{
     public Admin (String fName, String lName, int age, String gender){
 
         super(fName, lName, age, gender);
-        this.log = new Log();
         
     }
 
-
-/** 
- * Does an admin action and logs it.
- * 
- * @param action the admin action that is done.
- */
-// public void adminActon(String action){
-
-//     log.logAction(this, action);
-
-// }
 }

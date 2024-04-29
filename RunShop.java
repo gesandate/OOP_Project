@@ -66,7 +66,7 @@ public class RunShop implements Printable{
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
 
-            boolean is_user = login(username,password);
+            boolean is_user = Logic.login(username,password, (HashMap<String, User>) users_list);
             Log main_log = new Log();
             if (is_user){ // if we change this if statement to a while i think we can make it return back to it, I can't run it tho
                 User curr = users_list.get(username);
@@ -220,29 +220,6 @@ public class RunShop implements Printable{
 
 
     /**
-     * Attempts to log in a user with the given username and password.
-     *
-     * @param username The username of the user attempting to log in.
-     * @param password The password of the user attempting to log in.
-     * @return true if the login attempt is successful, false otherwise.
-     */
-    public static boolean login(String username, String password) {
-        // Check if the entered username exist and if the password matches
-        if (users_list.containsKey(username)) {
-            User currentUser = users_list.get(username);
-            if (currentUser.getPassword().equals(password)) {
-                System.out.println("Welcome "+username);
-                return true;
-            } else {
-                System.out.println("Invalid password. Try again.");
-            }
-        } else {
-            System.out.println("User not found. Contact help.");
-        }
-        return false;
-    }
-
-    /**
      * Admin login.
      */
     public static void adminLogin(){
@@ -290,7 +267,7 @@ public class RunShop implements Printable{
 
 
 
-//O O
+//O¬O
 //-_-
 
 
