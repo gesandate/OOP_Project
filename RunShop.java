@@ -38,7 +38,14 @@ public class RunShop implements Printable{
 
     private static HashMap<String, int[]> tickets = new HashMap<>();
 
+    private static final Map<String, CarFactory> factory = new HashMap<>();
 
+    static {
+        factory.put("Sedan", new SedanFactory());
+        factory.put("Hatchback", new HatchbackFactory());
+        factory.put("Pickup", new PickupFactory());
+        factory.put("SUV", new SUVFactory());
+    }
     /**
      * Main.
      *
@@ -57,7 +64,8 @@ public class RunShop implements Printable{
         users_list.put(user1.getUsername(), user1);
         users_list.put(user2.getUsername(), user2);
 
-        car_list = CSV_helper.cars_map_from_csv(car_file, car_list);
+
+        car_list = CSV_helper.cars_map_from_csv(car_file, car_list,factory);
 
         // Get user input for username and password
         System.out.print("Enter username: ");
@@ -68,7 +76,7 @@ public class RunShop implements Printable{
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
 
-            boolean is_user = login(username,password);
+            boolean is_user = Logic.login(username,password, (HashMap<String, User>) users_list);
             Log main_log = new Log();
             if (is_user){ // if we change this if statement to a while i think we can make it return back to it, I can't run it tho
                 User curr = users_list.get(username);
@@ -79,7 +87,7 @@ public class RunShop implements Printable{
                     switch (menu_input) {
                         case "1":
                             // Display all cars
-                            Logic.displayCars("null", 0,car_list);
+                            Car.displayCars("null", 0,car_list);
                             main_log.logAction(curr, "Displayed all cars", logFile);
                             break;
 
@@ -101,7 +109,7 @@ public class RunShop implements Printable{
                                         budget = curr.getBudget();
                                         //here need to -6.25% and if member +10%
                                         System.out.println(curr.getUsername()+" current budget: "+budget);
-                                        Logic.displayCars(new_used, budget, car_list);
+                                        Car.displayCars(new_used, budget, car_list);
                                         main_log.logAction(curr, "Displayed cars filtered by condition and by budget", logFile);
                                         //break; //for testing
                                     } catch (NumberFormatException e) {
@@ -110,7 +118,7 @@ public class RunShop implements Printable{
                                     }
 
                                 }else{
-                                    Logic.displayCars(new_used, 0, car_list);
+                                    Car.displayCars(new_used, 0, car_list);
                                     main_log.logAction(curr, "Displayed cars filtered by condition", logFile);
                                     //break;
                                 }
@@ -222,29 +230,6 @@ public class RunShop implements Printable{
 
 
     /**
-     * Attempts to log in a user with the given username and password.
-     *
-     * @param username The username of the user attempting to log in.
-     * @param password The password of the user attempting to log in.
-     * @return true if the login attempt is successful, false otherwise.
-     */
-    public static boolean login(String username, String password) {
-        // Check if the entered username exist and if the password matches
-        if (users_list.containsKey(username)) {
-            User currentUser = users_list.get(username);
-            if (currentUser.getPassword().equals(password)) {
-                System.out.println("Welcome "+username);
-                return true;
-            } else {
-                System.out.println("Invalid password. Try again.");
-            }
-        } else {
-            System.out.println("User not found. Contact help.");
-        }
-        return false;
-    }
-
-    /**
      * Admin login.
      */
     public static void adminLogin(){
@@ -294,7 +279,7 @@ public class RunShop implements Printable{
 
 
 
-//O O
+//O¬O
 //-_-
 
 

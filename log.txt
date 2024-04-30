@@ -42,3 +42,7 @@
 11:50:49 04/23/24 - Seb1 Returned car
 11:50:58 04/23/24 - Seb1 Displayed tickets
 11:51:19 04/23/24 - Seb1 Signed out
+22:33:16 04/29/24 - Seb1 login
+22:33:19 04/29/24 - Seb1 Displayed all cars
+22:47:44 04/29/24 - Seb1 login
+22:47:46 04/29/24 - Seb1 Displayed all cars

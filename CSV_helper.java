@@ -94,7 +94,7 @@ public class CSV_helper {
      * @param car_list the car list
      * @return the hash map
      */
-    public static HashMap<Integer, Car> cars_map_from_csv(String car_file, HashMap<Integer,Car> car_list){
+    public static HashMap<Integer, Car> cars_map_from_csv(String car_file, HashMap<Integer,Car> car_list,Map<String, CarFactory> factory){
         try{
             // Create BufferedReader object
             FileReader fileReader = new FileReader(car_file);
@@ -173,7 +173,15 @@ public class CSV_helper {
                 }
 
                 // Create Car object
-                Car car = new Car(carType, model, id, carsAvailable, price, fuelType, capacity, transmission, mileage, color, condition,vin, hasTurbo);
+                //Car car = new Car(carType, model, id, carsAvailable, price, fuelType, capacity, transmission, mileage, color, condition,vin, hasTurbo);
+                CarFactory carFactory = factory.get(carType);
+                if (carFactory == null) {
+                    // Car type not supported
+                    System.err.println("Unknown car type: " + carType);
+                    continue;
+                }
+
+                Car car = carFactory.createCar(carType, model, id, carsAvailable, price, fuelType, capacity, transmission, mileage, color, condition, vin, hasTurbo);
 
                 // Add car to carList
                 car_list.put(id, car);
