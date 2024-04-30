@@ -38,7 +38,14 @@ public class RunShop implements Printable{
 
     private static HashMap<String, int[]> tickets = new HashMap<>();
 
+    private static final Map<String, CarFactory> factory = new HashMap<>();
 
+    static {
+        factory.put("Sedan", new SedanFactory());
+        factory.put("Hatchback", new HatchbackFactory());
+        factory.put("Pickup", new PickupFactory());
+        factory.put("SUV", new SUVFactory());
+    }
     /**
      * Main.
      *
@@ -55,7 +62,8 @@ public class RunShop implements Printable{
         User user1 = new User("Seb", "Lev", 50000.00, 0, true, "Seb1", "123");
         users_list.put(user1.getUsername(), user1);
 
-        car_list = CSV_helper.cars_map_from_csv(car_file, car_list);
+
+        car_list = CSV_helper.cars_map_from_csv(car_file, car_list,factory);
 
         // Get user input for username and password
         System.out.print("Enter username: ");
@@ -77,7 +85,7 @@ public class RunShop implements Printable{
                     switch (menu_input) {
                         case "1":
                             // Display all cars
-                            Logic.displayCars("null", 0,car_list);
+                            Car.displayCars("null", 0,car_list);
                             main_log.logAction(curr, "Displayed all cars", logFile);
                             break;
 
@@ -99,7 +107,7 @@ public class RunShop implements Printable{
                                         budget = curr.getBudget();
                                         //here need to -6.25% and if member +10%
                                         System.out.println(curr.getUsername()+" current budget: "+budget);
-                                        Logic.displayCars(new_used, budget, car_list);
+                                        Car.displayCars(new_used, budget, car_list);
                                         main_log.logAction(curr, "Displayed cars filtered by condition and by budget", logFile);
                                         //break; //for testing
                                     } catch (NumberFormatException e) {
@@ -108,7 +116,7 @@ public class RunShop implements Printable{
                                     }
 
                                 }else{
-                                    Logic.displayCars(new_used, 0, car_list);
+                                    Car.displayCars(new_used, 0, car_list);
                                     main_log.logAction(curr, "Displayed cars filtered by condition", logFile);
                                     //break;
                                 }

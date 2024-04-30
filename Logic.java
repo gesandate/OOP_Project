@@ -34,34 +34,6 @@ public class Logic {
         return false;
     }
 
-    /**
-     * Displays cars based on the given condition and budget criteria.
-     *
-     * @param condition The condition of the car to display. Pass "null" to display all cars.
-     * @param budget    The maximum budget for the car. Pass 0 to ignore budget criteria.
-     * @param car_list  the car list
-     */
-    public static void displayCars(String condition, double budget, HashMap<Integer, Car> car_list) {
-        // Display header
-        System.out.println("ID\tCar Type\tModel\tCondition\tColor\tFuel Type\tCapacity\tTransmission\tMileage\tVIN\tTurbo\tPrice\tStock");
-        // Iterate over cars
-        for (Car car : car_list.values()) {
-            //shows all cars
-            if (condition.equalsIgnoreCase("null")){
-                car.print_menu();
-            }
-            // Check if the condition and price match the criteria
-            if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) { //maybe add a with in range of a couple 100s
-                // Display car information
-                car.print_menu();
-            }
-
-            if (car.getCondition().equalsIgnoreCase(condition) && budget == 0){ //display cars with condition no budget
-                car.print_menu();
-            }
-        }
-    }
-
 
     /**
      * Checks if a car with the given ID can be purchased by the current user.

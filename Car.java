@@ -1,10 +1,11 @@
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
  * This is a Car class.
  * This makes the car objects that are in the CSV file.
  */
-public class Car implements Printable{
+public class Car implements CarFactory,Printable{
 
     private String carType;
     private String model;
@@ -74,12 +75,20 @@ public class Car implements Printable{
         this.hasTurbo = hasTurbo;
     }
 
+    //
+    @Override
+    public Car createCar(String carType, String model, int ID, int availability, double price, String fuelType,
+                         int capacity, String transmission, int mileage, String color, String condition, String VIN,
+                         Boolean hasTurbo) {
+        return new Car(carType, model, ID, availability, price, fuelType, capacity, transmission, mileage, color, condition, VIN, hasTurbo);
+    }
+
     /**
      * Create car car.
      *
      * @return the car
      */
-    public static Car createCar() {
+    public Car input_createCar(CarFactory carFactory) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter car type:");
@@ -124,11 +133,37 @@ public class Car implements Printable{
         boolean hasTurbo = scanner.nextBoolean();
 
         // Create and return a new Car object with the user input
-        return new Car(carType, model, ID, availability, price, fuelType, capacity, transmission, 0, color, condition, VIN, hasTurbo);
+        return carFactory.createCar(carType, model, ID, availability, price, fuelType, capacity, transmission, 0, color, condition, VIN, hasTurbo);
     }
 
-
     //move display car??
+    /**
+     * Displays cars based on the given condition and budget criteria.
+     *
+     * @param condition The condition of the car to display. Pass "null" to display all cars.
+     * @param budget    The maximum budget for the car. Pass 0 to ignore budget criteria.
+     * @param car_list  the car list
+     */
+    public static void displayCars(String condition, double budget, HashMap<Integer, Car> car_list) {
+        // Display header
+        System.out.println("ID\tCar Type\tModel\tCondition\tColor\tFuel Type\tCapacity\tTransmission\tMileage\tVIN\tTurbo\tPrice\tStock");
+        // Iterate over cars
+        for (Car car : car_list.values()) {
+            //shows all cars
+            if (condition.equalsIgnoreCase("null")){
+                car.print_menu();
+            }
+            // Check if the condition and price match the criteria
+            if (car.getCondition().equalsIgnoreCase(condition) && car.getPrice() <= budget) { //maybe add a with in range of a couple 100s
+                // Display car information
+                car.print_menu();
+            }
+            if (car.getCondition().equalsIgnoreCase(condition) && budget == 0){ //display cars with condition no budget
+                car.print_menu();
+            }
+        }
+    }
+
     public void print_menu(){
         System.out.println(getID() + "\t" +getCarType() + "\t" + getModel() + "\t" +
                 getCondition() + "\t" + getColor() + "\t" + getFuelType() + "\t" +
