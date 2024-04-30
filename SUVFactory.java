@@ -1,3 +1,6 @@
+/**
+ * The type Suv factory.
+ */
 public class SUVFactory implements CarFactory {
     @Override
     public Car createCar(String carType, String model, int ID, int availability, double price, String fuelType,

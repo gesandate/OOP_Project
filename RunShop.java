@@ -246,7 +246,7 @@ public class RunShop implements Printable{
             switch (input) {
                 case (1):
                     System.out.println("Adding car, please follow the following instructions.");
-                    Car car = Car.createCar();
+                    Car car = Car.input_createCar(factory);
                     File addCar = CSV_helper.addCar(car, car_file);
                     reset = false;
                     break;
@@ -270,6 +270,7 @@ public class RunShop implements Printable{
         }
         scanner.close();
     }
+
 
 
 

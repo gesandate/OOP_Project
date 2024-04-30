@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -88,7 +89,7 @@ public class Car implements CarFactory,Printable{
      *
      * @return the car
      */
-    public Car input_createCar(CarFactory carFactory) {
+    public static Car input_createCar(Map<String, CarFactory> factory) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter car type:");
@@ -133,7 +134,7 @@ public class Car implements CarFactory,Printable{
         boolean hasTurbo = scanner.nextBoolean();
 
         scanner.close();
-
+        CarFactory carFactory = factory.get(carType);
         // Create and return a new Car object with the user input
         return carFactory.createCar(carType, model, ID, availability, price, fuelType, capacity, transmission, 0, color, condition, VIN, hasTurbo);
     }

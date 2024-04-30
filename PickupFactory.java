@@ -1,3 +1,6 @@
+/**
+ * The type Pickup factory.
+ */
 public class PickupFactory implements CarFactory {
     @Override
     public Car createCar(String carType, String model, int ID, int availability, double price, String fuelType,

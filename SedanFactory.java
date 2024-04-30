@@ -1,4 +1,6 @@
-// Concrete implementations of CarFactory for each type of car
+/**
+ * The type Sedan factory.
+ */
 public class SedanFactory implements CarFactory {
     @Override
     public Car createCar(String carType, String model, int ID, int availability, double price, String fuelType,

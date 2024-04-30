@@ -10,7 +10,14 @@ public class Logic {
     private static final double tax = 1.0625;
     private  static final double discount = .9;
 
-
+    /**
+     * The type Username not found exception.
+     */
+    static class UsernameNotFoundException extends RuntimeException {
+        public UsernameNotFoundException(String message) {
+            super(message);
+        }
+    }
     /**
      * Attempts to log in a user with the given username and password.
      *
@@ -29,7 +36,8 @@ public class Logic {
                 System.out.println("Invalid password. Try again.");
             }
         } else {
-            System.out.println("User not found. Contact help.");
+            // Throw custom exception if username is not found
+            throw new UsernameNotFoundException("User not found: " + username);
         }
         return false;
     }

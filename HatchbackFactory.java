@@ -1,4 +1,6 @@
-
+/**
+ * The type Hatchback factory.
+ */
 public class HatchbackFactory implements CarFactory {
     @Override
     public Car createCar(String carType, String model, int ID, int availability, double price, String fuelType,
