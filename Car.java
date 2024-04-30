@@ -123,6 +123,8 @@ public class Car implements Printable{
         System.out.println("Enter if has turbo (true/false):");
         boolean hasTurbo = scanner.nextBoolean();
 
+        scanner.close();
+
         // Create and return a new Car object with the user input
         return new Car(carType, model, ID, availability, price, fuelType, capacity, transmission, 0, color, condition, VIN, hasTurbo);
     }

@@ -14,10 +14,10 @@ public class RunShop implements Printable{
     //path //TO BE CHANGED FOR WHEN RUNNING CODE
     //this will be used to get car info and when editing car_data
 
-//    private static final String car_file = "C:/Users/gibbs/Downloads/car_data(1).csv";
-//    private static String car_outputFile = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newCarFile.csv";
-//    private static final String user_file = "C:/Users/gibbs/Downloads/user_data.csv";
-//    private static String new_user_data = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newUserFile.csv";
+    private static final String car_file = "C:/Users/gibbs/Downloads/car_data(1).csv";
+    private static String car_outputFile = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newCarFile.csv";
+    private static final String user_file = "C:/Users/gibbs/Downloads/user_data.csv";
+    private static String new_user_data = "C:/Users/gibbs/OneDrive/Advanced Objects/Project/newUserFile.csv";
 
 
     /**
@@ -29,10 +29,10 @@ public class RunShop implements Printable{
      * The Revenue list.
      */
     static HashMap<Integer, Double> revenue_list = new HashMap<>();
-     private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
-     private static String car_outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
-     private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/user_data.csv";
-     private static String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
+    //  private static final String car_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/car_data.csv";
+    //  private static String car_outputFile = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_car_data.csv";
+    //  private static final String user_file = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/Part_2/user_data.csv";
+    //  private static String new_user_data = "C:/Users/sebas/OneDrive/notes/CS 3331 Adv. Object-Oriented Proframming/Project 1/new_user_data.csv";
     //This will be the log file of all users actions
     private static final String logFile = "log.txt";
 
@@ -53,7 +53,9 @@ public class RunShop implements Printable{
         //Test user
         //User.createUser();
         User user1 = new User("Seb", "Lev", 50000.00, 0, true, "Seb1", "123");
+        User user2 = new User("Gib", "San", 50000.00, 0, true, "Gib1", "123");
         users_list.put(user1.getUsername(), user1);
+        users_list.put(user2.getUsername(), user2);
 
         car_list = CSV_helper.cars_map_from_csv(car_file, car_list);
 
@@ -258,14 +260,16 @@ public class RunShop implements Printable{
         while(reset){
             switch (input) {
                 case (1):
-                    System.out.println("Adding car");
+                    System.out.println("Adding car, please follow the following instructions.");
+                    Car car = Car.createCar();
+                    File addCar = CSV_helper.addCar(car, car_file);
                     reset = false;
                     break;
                 case (2):
                     System.out.println("What the ID of the car you would like to remove?");
                     input = scanner.nextInt();
                     car_list.remove(input);
-                    File newFile = CSV_helper.removeCar(input, car_file);
+                    File remCar = CSV_helper.removeCar(input, car_file);
                     reset = false;
                     break;
                 case (3):

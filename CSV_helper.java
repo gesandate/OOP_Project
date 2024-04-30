@@ -306,4 +306,60 @@ public class CSV_helper {
         return newFile;
     }
 
+    public static File addCar(Car car, String file) {
+        File newFile = new File("newCarFile.csv");
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
+            String order = reader.readLine();
+            String [] split = order.split(",");
+            String line = "";
+            for(int i = 0; i < split.length; i++) {
+                if (split[i].equalsIgnoreCase("Capacity")) {
+                    line += car.getCapacity();
+                } else if (split[i].equalsIgnoreCase("Car Type")) {
+                    line += car.getCarType();
+                } else if (split[i].equalsIgnoreCase("Cars Available")) {
+                    line += car.getAvailability();
+                } else if (split[i].equalsIgnoreCase("Color")) {
+                    line += car.getColor(); 
+                } else if (split[i].equalsIgnoreCase("ID")) {
+                    line += car.getID();
+                } else if (split[i].equalsIgnoreCase("Price")) {
+                    line += car.getPrice();
+                } else if (split[i].equalsIgnoreCase("Transmission")) {
+                    line += car.getTransmission();
+                } else if (split[i].equalsIgnoreCase("VIN")) {
+                    line += car.getVIN();
+                } else if (split[i].equalsIgnoreCase("Fuel Type")) {
+                    line += car.getFuelType();
+                } else if (split[i].equalsIgnoreCase("Model")) {
+                    line += car.getModel();
+                }
+                line += ",";
+            }
+            int count = 1;
+            int id = car.getID();
+            while (count <= id) { //read.line shouldn't be null
+                if (count == id){
+                    //
+                    writer.write(line); //write an empty line
+                    count++;
+                }else {
+                    //line = reader.readLine();
+                    writer.write(line);
+                    //writer.newLine();
+                    count++;
+                }
+            }
+            //writer.write(line);
+            //writer.newLine();
+            reader.close();
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file\n" + e);
+        }
+        return newFile;
+    }
+
 }
